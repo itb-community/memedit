@@ -37,6 +37,39 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		self:AddWeaponVanilla(weaponId)
 	end
 
+	BoardPawn.GetArmedWeaponVanilla = BoardPawn.GetArmedWeapon
+	BoardPawn.GetArmedWeaponType = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result = nil
+
+			try(function()
+				local armedWeaponIndex = self:GetArmedWeaponId()
+				if armedWeaponIndex == 0 then
+					result = "Move"
+				elseif armedWeaponIndex == 50 then
+					result = "Skill_Repair"
+				elseif armedWeaponIndex > 0 then
+					result = self:GetWeaponType(armedWeaponIndex)
+				end
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:GetArmedWeaponVanilla()
+	end
+
+	BoardPawn.GetArmedWeapon = BoardPawn.GetArmedWeaponType
+
 	BoardPawn.GetClass = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
