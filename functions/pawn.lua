@@ -207,6 +207,81 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
+	BoardPawn.GetWeaponBaseId = function(self, weaponIndex)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().pawn.getWeaponBaseId(self, weaponIndex)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardPawn.GetWeaponClass = function(self, weaponIndex)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().pawn.getWeaponClass(self, weaponIndex)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardPawn.GetWeaponCount = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local result
+
+		try(function()
+			result = memedit:require().pawn.getWeaponCount(self)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardPawn.GetWeaponId = function(self, weaponIndex)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().pawn.getWeaponId(self, weaponIndex)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardPawn.IsInvisible = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -337,6 +412,21 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end)
 
 		return result
+	end
+
+	BoardPawn.RemoveWeapon = function(self, weaponIndex)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+
+		try(function()
+			memedit:require().pawn.removeWeapon(self, weaponIndex)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
 	end
 
 	BoardPawn.SetBoosted = function(self, boosted)
@@ -664,6 +754,22 @@ function onPawnClassInitialized(BoardPawn, pawn)
 			local memedit = memedit:require()
 			memedit.pawn.setUndoX(self, loc.x)
 			memedit.pawn.setUndoY(self, loc.y)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardPawn.SetWeaponClass = function(self, weaponIndex, class)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+		Assert.Equals("string", type(class), "Argument #2")
+
+		try(function()
+			memedit:require().pawn.setWeaponClass(self, weaponIndex, class)
 		end)
 		:catch(function(err)
 			error(string.format(

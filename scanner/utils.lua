@@ -79,6 +79,18 @@ function utils.prepareScanPawn(def)
 	end
 end
 
+-- Resets the definition of memedit_weapon and
+-- applies the new definition onto it.
+function utils.prepareScanWeapon(def)
+	for i,v in pairs(memedit_weapon) do
+		memedit_weapon[i] = nil
+	end
+
+	for i,v in pairs(def or {}) do
+		memedit_weapon[i] = v
+	end
+end
+
 -- Finds a tile without any unit on it,
 -- and resets it with Board:ClearSpace
 -- before returning it.
