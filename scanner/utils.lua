@@ -67,15 +67,15 @@ function utils.getMech()
 	end
 end
 
--- Resets the definition of ScanPawn and
+-- Resets the definition of memedit_scanPawn and
 -- applies the new definition onto it.
 function utils.prepareScanPawn(def)
-	for i,v in pairs(ScanPawn) do
-		ScanPawn[i] = nil
+	for i,v in pairs(memedit_scanPawn) do
+		memedit_scanPawn[i] = nil
 	end
 
 	for i,v in pairs(def or {}) do
-		ScanPawn[i] = v
+		memedit_scanPawn[i] = v
 	end
 end
 
@@ -253,10 +253,10 @@ function utils.requireScanMovePawn()
 			Health = 9,
 			Flying = true,
 			DefaultTeam = TEAM_PLAYER,
-			SkillList = {"ScanWeaponReset"},
+			SkillList = {"memedit_scanWeaponReset"},
 		}
 
-		scanMovePawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		scanMovePawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		scanMovePawnId = scanMovePawn:GetId()
 
 		local p = Point(7,7)
@@ -275,8 +275,8 @@ function utils.requireScanMovePawn()
 		end
 	end
 
-	ScanPawn.Name = "ScanPawn"
-	ScanPawn.MoveSkill = "ScanMove"
+	memedit_scanPawn.Name = "ScanPawn"
+	memedit_scanPawn.MoveSkill = "memedit_scanMove"
 
 	return scanMovePawn
 end

@@ -18,8 +18,8 @@ scans.highlightedX = inheritClass(Scan, {
 	condition = boardExists,
 	cleanup = function(self)
 		cleanupScanMovePawn()
-		if ScanMove.Caller == self then
-			ScanMove:TeardownEvent()
+		if memedit_scanMove.Caller == self then
+			memedit_scanMove:TeardownEvent()
 		end
 	end,
 	actions = {
@@ -27,7 +27,7 @@ scans.highlightedX = inheritClass(Scan, {
 			local pawn, waitInstruction = requireScanMovePlayerPawn()
 
 			if self.iteration == 1 then
-				ScanMove:SetEvents{
+				memedit_scanMove:SetEvents{
 					TargetEvent = self.onMoveHighlighted,
 					AfterEffectEvent = self.afterMoveEffect,
 					Caller = self,
@@ -59,8 +59,8 @@ scans.highlightedY = inheritClass(Scan, {
 	condition = boardExists,
 	cleanup = function(self)
 		cleanupScanMovePawn()
-		if ScanMove.Caller == self then
-			ScanMove:TeardownEvent()
+		if memedit_scanMove.Caller == self then
+			memedit_scanMove:TeardownEvent()
 		end
 	end,
 	actions = {
@@ -68,7 +68,7 @@ scans.highlightedY = inheritClass(Scan, {
 			local pawn, waitInstruction = requireScanMovePlayerPawn()
 
 			if self.iteration == 1 then
-				ScanMove:SetEvents{
+				memedit_scanMove:SetEvents{
 					TargetEvent = self.onMoveHighlighted,
 					AfterEffectEvent = self.afterMoveEffect,
 					Caller = self,

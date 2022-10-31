@@ -1,15 +1,15 @@
 
 -- Dummy objects used for scanning memory.
 
-ScanPawn = Pawn:new{}
-Item_Scan = {Image = "", Damage = SpaceDamage(), Tooltip = "", Icon = "", UsedImage = ""}
-ScanWeapon = Skill:new{}
-ScanWeaponReset = ScanWeapon:new{
+memedit_scanPawn = Pawn:new{}
+memedit_scanItem = {Image = "", Damage = SpaceDamage(), Tooltip = "", Icon = "", UsedImage = ""}
+memedit_scanWeapon= Skill:new{}
+memedit_scanWeaponReset = memedit_scanWeapon:new{
 	Name = "Reset Scan Pawn",
 	Description = "Remove the current Scan Pawn, and retry.",
 }
 
-function ScanWeapon:GetTargetArea(p)
+function memedit_scanWeapon:GetTargetArea(p)
 	local ret = PointList()
 
 	for i,p in ipairs(Board) do
@@ -19,7 +19,7 @@ function ScanWeapon:GetTargetArea(p)
 	return ret
 end
 
-function ScanWeapon:GetSkillEffect(p1, p2)
+function memedit_scanWeapon:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 
 	ret:AddDamage(SpaceDamage(p2))
@@ -27,9 +27,9 @@ function ScanWeapon:GetSkillEffect(p1, p2)
 	return ret
 end
 
-ScanWeaponQueued = ScanWeapon:new{}
+memedit_scanWeaponQueued = memedit_scanWeapon:new{}
 
-function ScanWeaponQueued:GetSkillEffect(p1, p2)
+function memedit_scanWeaponQueued:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 
 	ret:AddQueuedDamage(SpaceDamage(p2))
@@ -37,10 +37,10 @@ function ScanWeaponQueued:GetSkillEffect(p1, p2)
 	return ret
 end
 
-ScanMove = Move:new{}
-ScanMove.GetTargetArea = ScanWeapon.GetTargetArea
+memedit_scanMove = Move:new{}
+memedit_scanMove.GetTargetArea = memedit_scanWeapon.GetTargetArea
 
-function ScanMove:TeardownEvent()
+function memedit_scanMove:TeardownEvent()
 	if self.Teardown then
 		self.Teardown(self.Caller)
 	end
@@ -52,7 +52,7 @@ function ScanMove:TeardownEvent()
 	self.Teardown = nil
 end
 
-function ScanMove:SetEvents(options)
+function memedit_scanMove:SetEvents(options)
 	self:TeardownEvent()
 
 	self.TargetEvent = options.TargetEvent
@@ -62,7 +62,7 @@ function ScanMove:SetEvents(options)
 	self.Teardown = options.Teardown
 end
 
-function ScanMove:GetSkillEffect(p1, p2)
+function memedit_scanMove:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 	local pawn = Board:GetPawn(p1)
 
@@ -74,8 +74,8 @@ function ScanMove:GetSkillEffect(p1, p2)
 		ret:AddScript(string.format([[
 			local pawn = Board:GetPawn(%s) 
 			if pawn then 
-				if ScanMove.BeforeEffectEvent then 
-					ScanMove.BeforeEffectEvent(ScanMove.Caller, pawn, %s, %s) 
+				if memedit_scanMove.BeforeEffectEvent then 
+					memedit_scanMove.BeforeEffectEvent(memedit_scanMove.Caller, pawn, %s, %s) 
 				end 
 			end
 		]], pawn:GetId(), p1:GetString(), p2:GetString()))
@@ -89,8 +89,8 @@ function ScanMove:GetSkillEffect(p1, p2)
 			fx:AddScript([=[
 				local pawn = Board:GetPawn(%s) 
 				if pawn then 
-					if ScanMove.AfterEffectEvent then 
-						ScanMove.AfterEffectEvent(ScanMove.Caller, pawn, %s, %s) 
+					if memedit_scanMove.AfterEffectEvent then 
+						memedit_scanMove.AfterEffectEvent(memedit_scanMove.Caller, pawn, %s, %s) 
 					end 
 				end
 			]=]) 

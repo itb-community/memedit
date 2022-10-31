@@ -121,8 +121,8 @@ scans.highlighted = inheritClass(Scan, {
 	condition = boardExists,
 	cleanup = function(self)
 		cleanupScanMovePawn()
-		if ScanMove.Caller == self then
-			ScanMove:TeardownEvent()
+		if memedit_scanMove.Caller == self then
+			memedit_scanMove:TeardownEvent()
 		end
 	end,
 	actions = {
@@ -130,14 +130,14 @@ scans.highlighted = inheritClass(Scan, {
 			local pawn, waitInstruction = requireScanMovePlayerPawn()
 
 			if self.iteration == 1 then
-				ScanMove:SetEvents{
+				memedit_scanMove:SetEvents{
 					TargetEvent = self.onMoveHighlighted,
 					Caller = self,
 				}
 			end
 
 			if pawn then
-				self.instruction = "Hover tiles with the provided ScanPawn's Move skill"
+				self.instruction = "Hover tiles with the provided memedit_scanPawn's Move skill"
 			else
 				self.instruction = waitInstruction
 			end

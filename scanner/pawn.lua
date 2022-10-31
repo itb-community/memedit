@@ -24,7 +24,7 @@ scans.acid = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local isAcid = math.random(0,1)
 		pawn:SetAcid(true)
 		pawn:SetAcid(false)
@@ -43,8 +43,8 @@ scans.active = inheritClass(Scan, {
 	dataType = "bool",
 	actions = {
 		function(self)
-			prepareScanPawn{ SkillList = {"ScanWeapon"} }
-			local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+			prepareScanPawn{ SkillList = {"memedit_scanWeapon"} }
+			local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 			local isActive = math.random(0,1) == 1
 			pawn:SetActive(isActive)
 
@@ -65,7 +65,7 @@ scans.baseMaxHealth = inheritClass(Scan, {
 	action = function(self)
 		local hp = math.random(3, 13)
 		prepareScanPawn{ Health = hp }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		pawn:SetHealth(1)
 
 		self:searchPawn(pawn, hp)
@@ -121,11 +121,11 @@ scans.boosted = inheritClass(Scan, {
 			end
 
 			if isBoosted == 1 then
-				mech:AddWeapon("ScanWeapon")
+				mech:AddWeapon("memedit_scanWeapon")
 				mech:AddWeapon("Passive_FireBoost")
 				Board:SetFire(p, true)
 			else
-				mech:AddWeapon("ScanWeapon")
+				mech:AddWeapon("memedit_scanWeapon")
 				mech:FireWeapon(p, 1)
 			end
 
@@ -150,7 +150,7 @@ scans.class = inheritClass(Scan, {
 	action = function(self)
 		local class = "ScanClass"..tostring(math.random(3,13))
 		prepareScanPawn{ Class = class }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, class)
 		self:evaluateResults()
@@ -166,7 +166,7 @@ scans.corpse = inheritClass(Scan, {
 	action = function(self)
 		local corpse = math.random(0,1) == 1
 		prepareScanPawn{ Corpse = corpse }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, corpse)
 		self:evaluateResults()
@@ -181,7 +181,7 @@ scans.customAnim = inheritClass(Scan, {
 	dataType = "string",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local customAnim = "ScanAnim"..tostring(math.random(3,13))
 		pawn:SetCustomAnim(customAnim)
 
@@ -199,7 +199,7 @@ scans.defaultfaction = inheritClass(Scan, {
 	action = function(self)
 		local defaultfaction = math.random(3,13)
 		prepareScanPawn{ DefaultFaction = defaultfaction }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, defaultfaction)
 		self:evaluateResults()
@@ -225,7 +225,7 @@ scans.fire = inheritClass(Scan, {
 		function(self)
 			prepareScanPawn{}
 			local p = randomCleanPoint()
-			local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+			local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 			local isFire = math.random(0,1)
 			Board:AddPawn(pawn, p)
 			Board:SetFire(p, true)
@@ -255,7 +255,7 @@ scans.flying = inheritClass(Scan, {
 	action = function(self)
 		local flying = math.random(0,1) == 1
 		prepareScanPawn{ Flying = flying }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, flying)
 		self:evaluateResults()
@@ -270,7 +270,7 @@ scans.frozen = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local isFrozen = math.random(0,1)
 		pawn:SetFrozen(true)
 		pawn:SetFrozen(false)
@@ -290,7 +290,7 @@ scans.imageOffset = inheritClass(Scan, {
 	action = function(self)
 		local imageOffset = math.random(3,13)
 		prepareScanPawn{ ImageOffset = imageOffset }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, imageOffset)
 		self:evaluateResults()
@@ -306,7 +306,7 @@ scans.impactMaterial = inheritClass(Scan, {
 	action = function(self)
 		local impactMaterial = math.random(3,13)
 		prepareScanPawn{ ImpactMaterial = impactMaterial }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, impactMaterial)
 		self:evaluateResults()
@@ -321,7 +321,7 @@ scans.invisible = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local isInvisible = math.random(0,1) == 1
 		pawn:SetInvisible(isInvisible)
 
@@ -339,7 +339,7 @@ scans.jumper = inheritClass(Scan, {
 	action = function(self)
 		local jumper = math.random(0,1) == 1
 		prepareScanPawn{ Jumper = jumper }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, jumper)
 		self:evaluateResults()
@@ -355,7 +355,7 @@ scans.leader = inheritClass(Scan, {
 	action = function(self)
 		local leader = math.random(3,13)
 		prepareScanPawn{ Leader = leader }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, leader)
 		self:evaluateResults()
@@ -371,7 +371,7 @@ scans.neutral = inheritClass(Scan, {
 	action = function(self)
 		local neutral = math.random(0,1) == 1
 		prepareScanPawn{ Neutral = neutral }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, neutral)
 		self:evaluateResults()
@@ -387,7 +387,7 @@ scans.massive = inheritClass(Scan, {
 	action = function(self)
 		local massive = math.random(0,1) == 1
 		prepareScanPawn{ Massive = massive }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, massive)
 		self:evaluateResults()
@@ -405,7 +405,7 @@ scans.maxHealth = inheritClass(Scan, {
 	action = function(self)
 		local hp = math.random(3, 13)
 		prepareScanPawn{ Health = hp }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		pawn:SetHealth(1)
 
 		self:searchPawn(pawn, hp)
@@ -421,7 +421,7 @@ scans.mech = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		local isMech = math.random(0,1)
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		if isMech == 1 then
 			pawn:SetMech()
@@ -441,7 +441,7 @@ scans.minor = inheritClass(Scan, {
 	action = function(self)
 		local minor = math.random(0,1) == 1
 		prepareScanPawn{ Minor = minor }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, minor)
 		self:evaluateResults()
@@ -456,7 +456,7 @@ scans.missionCritical = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local isMissionCritical = math.random(0,1) == 1
 		pawn:SetMissionCritical(isMissionCritical)
 
@@ -477,15 +477,15 @@ scans.movementSpent = inheritClass(Scan, {
 	condition = missionBoardExists,
 	cleanup = function(self)
 		cleanupScanMovePawn()
-		if ScanMove.Caller == self then
-			ScanMove:TeardownEvent()
+		if memedit_scanMove.Caller == self then
+			memedit_scanMove:TeardownEvent()
 		end
 	end,
 	action = function(self)
 		local pawn, waitInstruction = requireScanMovePlayerPawn()
 
 		if self.iteration == 1 then
-			ScanMove:SetEvents{
+			memedit_scanMove:SetEvents{
 				TargetEvent = self.onMoveTarget,
 				AfterEffectEvent = self.afterMoveEffect,
 				Caller = self,
@@ -494,9 +494,9 @@ scans.movementSpent = inheritClass(Scan, {
 
 		if pawn then
 			if pawn:IsUndoPossible() then
-				self.instruction = "Undo move with the provided ScanPawn"
+				self.instruction = "Undo move with the provided memedit_scanPawn"
 			else
-				self.instruction = "Move the provided ScanPawn"
+				self.instruction = "Move the provided memedit_scanPawn"
 			end
 		else
 			self.instruction = waitInstruction
@@ -521,7 +521,7 @@ scans.moveSpeed = inheritClass(Scan, {
 	action = function(self)
 		local moveSpeed = math.random(3,13)
 		prepareScanPawn{ MoveSpeed = moveSpeed }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, moveSpeed)
 		self:evaluateResults()
@@ -536,7 +536,7 @@ scans.mutation = inheritClass(Scan, {
 	dataType = "int",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local mutation = math.random(3,13)
 		pawn:SetMutation(mutation)
 
@@ -570,7 +570,7 @@ scans.owner = inheritClass(Scan, {
 			prepareScanPawn()
 			local fx = SkillEffect()
 			local d = SpaceDamage(self.data.p)
-			d.sPawn = "ScanPawn"
+			d.sPawn = "memedit_scanPawn"
 			fx.iOwner = self.data.owner
 			fx:AddDamage(d)
 			Board:AddEffect(fx)
@@ -592,7 +592,7 @@ scans.powered = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local powered = math.random(0,1) == 1
 		pawn:SetPowered(powered)
 
@@ -610,7 +610,7 @@ scans.pushable = inheritClass(Scan, {
 	action = function(self)
 		local pushable = math.random(0,1) == 1
 		prepareScanPawn{ Pushable = pushable }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, pushable)
 		self:evaluateResults()
@@ -633,8 +633,8 @@ scans.queuedTargetX = inheritClass(Scan, {
 		local p1 = randomCleanPoint()
 		local p2 = randomCleanPoint()
 
-		prepareScanPawn{ SkillList = {"ScanWeaponQueued"} }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		prepareScanPawn{ SkillList = {"memedit_scanWeaponQueued"} }
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		Board:AddPawn(pawn, p1)
 		pawn:FireWeapon(p2, 1)
@@ -661,8 +661,8 @@ scans.queuedTargetY = inheritClass(Scan, {
 		local p1 = randomCleanPoint()
 		local p2 = randomCleanPoint()
 
-		prepareScanPawn{ SkillList = {"ScanWeaponQueued"} }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		prepareScanPawn{ SkillList = {"memedit_scanWeaponQueued"} }
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		Board:AddPawn(pawn, p1)
 		pawn:FireWeapon(p2, 1)
@@ -681,7 +681,7 @@ scans.shield = inheritClass(Scan, {
 	dataType = "bool",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local isShielded = math.random(0,1)
 		pawn:SetShield(true)
 		pawn:SetShield(false)
@@ -701,7 +701,7 @@ scans.spacecolor = inheritClass(Scan, {
 	action = function(self)
 		local spacecolor = math.random(0,1) == 1
 		prepareScanPawn{ SpaceColor = spacecolor }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, spacecolor)
 		self:evaluateResults()
@@ -716,7 +716,7 @@ scans.team = inheritClass(Scan, {
 	dataType = "int",
 	action = function(self)
 		prepareScanPawn{}
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local team = math.random(3,13)
 		pawn:SetTeam(team)
 
@@ -734,7 +734,7 @@ scans.teleporter = inheritClass(Scan, {
 	action = function(self)
 		local teleporter = math.random(0,1) == 1
 		prepareScanPawn{ Teleporter = teleporter }
-		local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		self:searchPawn(pawn, teleporter)
 		self:evaluateResults()
@@ -752,22 +752,22 @@ scans.undoX = inheritClass(Scan, {
 	condition = missionBoardExists,
 	cleanup = function(self)
 		cleanupScanMovePawn()
-		if ScanMove.Caller == self then
-			ScanMove:TeardownEvent()
+		if memedit_scanMove.Caller == self then
+			memedit_scanMove:TeardownEvent()
 		end
 	end,
 	action = function(self)
 		local pawn, waitInstruction = requireScanMovePlayerPawn()
 
 		if self.iteration == 1 then
-			ScanMove:SetEvents{
+			memedit_scanMove:SetEvents{
 				AfterEffectEvent = self.afterMoveEffect,
 				Caller = self,
 			}
 		end
 
 		if pawn then
-			self.instruction = "Move the provided ScanPawn"
+			self.instruction = "Move the provided memedit_scanPawn"
 		else
 			self.instruction = waitInstruction
 		end
@@ -790,22 +790,22 @@ scans.undoY = inheritClass(Scan, {
 	condition = missionBoardExists,
 	cleanup = function(self)
 		cleanupScanMovePawn()
-		if ScanMove.Caller == self then
-			ScanMove:TeardownEvent()
+		if memedit_scanMove.Caller == self then
+			memedit_scanMove:TeardownEvent()
 		end
 	end,
 	action = function(self)
 		local pawn, waitInstruction = requireScanMovePlayerPawn()
 
 		if self.iteration == 1 then
-			ScanMove:SetEvents{
+			memedit_scanMove:SetEvents{
 				AfterEffectEvent = self.afterMoveEffect,
 				Caller = self,
 			}
 		end
 
 		if pawn then
-			self.instruction = "Move the provided ScanPawn"
+			self.instruction = "Move the provided memedit_scanPawn"
 		else
 			self.instruction = waitInstruction
 		end

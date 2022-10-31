@@ -23,7 +23,7 @@ scans.pawnObjSize = inheritClass(Scan, {
 		local arr = {}
 
 		for i = 1, self.pawnCount do
-			local pawn = PAWN_FACTORY:CreatePawn("ScanPawn")
+			local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 			arr[#arr+1] = memedit.dll.debug.getObjAddr(pawn)
 		end
 
@@ -158,7 +158,7 @@ scans.tileObjSize = inheritClass(Scan, {
 		for i, p in ipairs(Board) do
 			if not Board:IsPawnSpace(p) then
 				Board:ClearSpace(p)
-				Board:SetItem(p, "Item_Scan")
+				Board:SetItem(p, "memedit_scanItem")
 			end
 		end
 
@@ -172,7 +172,7 @@ scans.tileObjSize = inheritClass(Scan, {
 		-- and we should be able to find the item string several times.
 		-- We can then measure the distance between each occurance
 		-- to find the tile object size.
-		self:search(tileAddr, 0, 0xFFFF, "Item_Scan", "string")
+		self:search(tileAddr, 0, 0xFFFF, "memedit_scanItem", "string")
 
 		if #self.results > 1 then
 			self:succeed(findSmallestGap(self.results))
