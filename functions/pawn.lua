@@ -243,14 +243,14 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
-	BoardPawn.GetWeaponBaseId = function(self, weaponIndex)
+	BoardPawn.GetWeaponBaseType = function(self, weaponIndex)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("number", type(weaponIndex), "Argument #1")
 
 		local result
 
 		try(function()
-			result = memedit:require().pawn.getWeaponBaseId(self, weaponIndex)
+			result = memedit:require().pawn.getWeaponBaseType(self, weaponIndex)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -299,14 +299,14 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
-	BoardPawn.GetWeaponId = function(self, weaponIndex)
+	BoardPawn.GetWeaponType = function(self, weaponIndex)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("number", type(weaponIndex), "Argument #1")
 
 		local result
 
 		try(function()
-			result = memedit:require().pawn.getWeaponId(self, weaponIndex)
+			result = memedit:require().pawn.getWeaponType(self, weaponIndex)
 		end)
 		:catch(function(err)
 			error(string.format(
