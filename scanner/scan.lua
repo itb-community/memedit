@@ -233,7 +233,7 @@ local Scan = newClass{
 		local weaponListAddr = dll.debug.getAddrInt(pawnAddr + vital.delta_weapons)
 		local weaponAddr = dll.debug.getAddrInt(weaponListAddr + weaponIndex * 0x8)
 
-		self:search(weaponAddr, 0, delta.size_weapon, val, dataType)
+		self:search(weaponAddr, 0, vital.size_weapon, val, dataType)
 	end,
 
 	evaluateResults = function(self)
