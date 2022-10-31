@@ -195,4 +195,32 @@ scans.pawnWeaponListDelta = inheritClass(Scan, {
 	end,
 })
 
+-- The weapon object size is used as a limit when
+-- scanning for values in weapon objects. It is not
+-- absolutely vital to have this be 100% accurate.
+-- But it is trivial to create a lot of weapons and
+-- measure the distance between them in memory.
+scans.weaponObjSize = inheritClass(Scan, {
+	id = "size_weapon",
+	name = "Weapon Object Size",
+	prerequisiteScans = {"vital.size_pawn", "vital.delta_weapons"},
+	weaponCount = 1000,
+	action = function(self)
+		local arr = {}
+
+		for i = 1, self.weaponCount do
+			local vital = self.scanner.output.vital
+			local dll = memedit.dll
+			local pawn = PAWN_FACTORY:CreatePawn("memedit_weaponPawn")
+			local pawnAddr = dll.debug.getObjAddr(pawn)
+			local weaponIndex = 1
+			local weaponListAddr = dll.debug.getAddrInt(pawnAddr + vital.delta_weapons)
+			local weaponAddr = dll.debug.getAddrInt(weaponListAddr + weaponIndex * 0x8)
+			arr[#arr+1] = weaponAddr
+		end
+
+		self:succeed(findSmallestGap(arr))
+	end,
+})
+
 return scans

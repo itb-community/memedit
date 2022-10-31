@@ -2,6 +2,7 @@
 -- Dummy objects used for scanning memory.
 
 memedit_scanPawn = Pawn:new{}
+memedit_weaponPawn = Pawn:new{ SkillList = {"memedit_scanWeapon"} }
 memedit_scanItem = {Image = "", Damage = SpaceDamage(), Tooltip = "", Icon = "", UsedImage = ""}
 memedit_scanWeapon= Skill:new{}
 memedit_scanWeaponReset = memedit_scanWeapon:new{
