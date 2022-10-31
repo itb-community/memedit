@@ -1,6 +1,42 @@
 
 function onPawnClassInitialized(BoardPawn, pawn)
 
+	BoardPawn.AddWeaponVanilla = pawn.AddWeapon
+	BoardPawn.AddWeapon = function(self, weaponId)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("string", type(weaponId), "Argument #1")
+		Assert.Equals({"nil", "boolean"}, type(forceActive), "Argument #2")
+
+		local memedit = memedit:get()
+		if memedit then
+			local weapon = _G[weaponId]
+
+			if weapon then
+				try(function()
+					local origPowerCost = weapon.PowerCost
+					local weaponIndex = self:GetWeaponCount() + 1
+
+					weapon.PowerCost = 0
+
+					self:AddWeaponVanilla(weaponId)
+					self:SetWeaponClass(weaponIndex, weapon.Class)
+
+					weapon.PowerCost = origPowerCost
+				end)
+				:catch(function(err)
+					error(string.format(
+							"memedit.dll: %s",
+							tostring(err)
+					))
+				end)
+
+				return
+			end
+		end
+
+		self:AddWeaponVanilla(weaponId)
+	end
+
 	BoardPawn.GetClass = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
