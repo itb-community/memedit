@@ -77,7 +77,7 @@ scans.boosted = inheritClass(Scan, {
 	id = "Boosted",
 	gameVersion = "1.2.63",
 	name = "Pawn Boosted",
-	prerequisiteScans = {"vital.size_pawn", "vital.delta_weapons"},
+	prerequisiteScans = {"vital.size_pawn", "vital.delta_weapons", "pawn.WeaponList"},
 	access = "RW",
 	-- Set this to bool so we get is/set functions
 	-- even though the value type is a byte.
@@ -113,9 +113,10 @@ scans.boosted = inheritClass(Scan, {
 			for pawnId = 0, 2 do
 				local pawn = Board:GetPawn(pawnId)
 				if pawn then
-					local weaponCount = dll.pawn.getWeaponCount(pawn)
-					for weaponIndex = 1, weaponCount do
-						dll.pawn.removeWeapon(pawn, 1)
+					local weaponList = dll.pawn.getWeaponList(pawn)
+					local weaponCount = weaponList:size() - 1
+					for weaponIndex = weaponCount, 1, -1 do
+						weaponList:erase(weaponIndex)
 					end
 				end
 			end
@@ -814,6 +815,19 @@ scans.undoY = inheritClass(Scan, {
 		self:searchPawn(pawn, p1.y)
 		self:evaluateResults()
 		memedit.dll.pawn.setMovementSpent(pawn, false)
+	end,
+})
+
+scans.weaponList = inheritClass(Scan, {
+	id = "WeaponList",
+	name = "Pawn Weapon List",
+	prerequisiteScans = {"vital.size_pawn", "vital.delta_weapons"},
+	reloadMemeditOnSuccess = true,
+	access = "R",
+	dataType = "SharedVoidPtrList",
+	action = function(self)
+		-- Skip scan.
+		self:succeed(0x4)
 	end,
 })
 
