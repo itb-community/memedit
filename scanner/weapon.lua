@@ -42,8 +42,7 @@ scans.class = inheritClass(Scan, {
 	action = function(self)
 		local classes = {"Prime","Brute","Ranged","Science"}
 		local class = random_removal(classes)
-		LOG("test class",class)
-		prepareScanWeapon{ }
+		prepareScanWeapon{}
 		prepareScanPawn{ Class = class, SkillList = {"memedit_scanWeapon"} }
 		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 		local weaponIndex = 1
