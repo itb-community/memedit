@@ -145,19 +145,43 @@ local Scan = newClass{
 		local step = memsize[dataType]
 		local results = self.results
 
+		local function isListEqual(base, delta)
+			local vecAddr = dll.debug.getAddrInt(base + delta)
+
+			if dll.debug.isAddrNotPointer(vecAddr, #val * step) then
+				return false
+			end
+
+			for i = 1, #val do
+				local delta = (i-1) * step
+				local addrVal = get(vecAddr + delta)
+				if get(vecAddr + delta) ~= val[i] then
+					return false
+				end
+			end
+
+			return true
+		end
+
 		if results == nil then
 			results = {}
 			self.results = results
 
 			for delta = from, to - step, step do
-				if val == get(base + delta) then
+				if false
+					or (type(val) == 'table' and isListEqual(base, delta))
+					or (type(val) ~= 'table' and val == get(base + delta))
+				then
 					results[#results+1] = delta
 				end
 			end
 		else
 			for i = #results, 1, -1 do
 				local delta = results[i]
-				if val ~= get(base + delta) then
+				if false
+					or (type(val) == 'table' and isListEqual(base, delta) == false)
+					or (type(val) ~= 'table' and val ~= get(base + delta))
+				then
 					-- swap and remove
 					results[i] = results[#results]
 					results[#results] = nil

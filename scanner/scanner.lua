@@ -26,6 +26,8 @@ local TypeEnum = {
 	bool = 3,
 	double = 4,
 	string = 5,
+	IntList = 6,
+	SharedVoidPtrList = 7,
 }
 
 function Scanner:new()
