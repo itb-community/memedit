@@ -576,21 +576,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end)
 	end
 
-	BoardPawn.SetId = function(self, id)
-		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals("number", type(id), "Argument #1")
-
-		try(function()
-			memedit:require().pawn.setId(self, id)
-		end)
-		:catch(function(err)
-			error(string.format(
-					"memedit.dll: %s",
-					tostring(err)
-			))
-		end)
-	end
-
 	BoardPawn.SetImageOffset = function(self, imageOffset)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("number", type(imageOffset), "Argument #1")
