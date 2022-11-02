@@ -15,7 +15,7 @@ local scans = {}
 
 
 scans.baseType = inheritClass(Scan, {
-	id = "WeaponBaseType",
+	id = "BaseType",
 	name = "Weapon Base Type",
 	prerequisiteScans = weaponPrerequisites,
 	expectedResults = 2,
@@ -34,7 +34,7 @@ scans.baseType = inheritClass(Scan, {
 })
 
 scans.class = inheritClass(Scan, {
-	id = "WeaponClass",
+	id = "Class",
 	name = "Weapon Class",
 	prerequisiteScans = weaponPrerequisites,
 	access = "RW",
@@ -54,7 +54,7 @@ scans.class = inheritClass(Scan, {
 })
 
 scans.type = inheritClass(scans.baseType, {
-	id = "WeaponType",
+	id = "Type",
 	name = "Weapon Type",
 	expectedResultIndex = 2,
 })
