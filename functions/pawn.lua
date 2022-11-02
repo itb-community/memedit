@@ -283,7 +283,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		local result
 
 		try(function()
-			result = memedit:require().pawn.getWeaponBaseType(self, weaponIndex)
+			result = memedit:require().weapon.getBaseType(self, weaponIndex)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -302,7 +302,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		local result
 
 		try(function()
-			result = memedit:require().pawn.getWeaponClass(self, weaponIndex)
+			result = memedit:require().weapon.getClass(self, weaponIndex)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -320,7 +320,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		local result
 
 		try(function()
-			result = memedit:require().pawn.getWeaponCount(self)
+			result = memedit:require().pawn.getWeaponList(self):size() - 1
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -339,7 +339,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		local result
 
 		try(function()
-			result = memedit:require().pawn.getWeaponType(self, weaponIndex)
+			result = memedit:require().weapon.getType(self, weaponIndex)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -488,7 +488,10 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		Assert.Equals("number", type(weaponIndex), "Argument #1")
 
 		try(function()
-			memedit:require().pawn.removeWeapon(self, weaponIndex)
+			local weaponList = memedit:require().pawn.getWeaponList(self, weaponIndex)
+			if weaponIndex > 0 and weaponIndex < weaponList:size() then
+				weaponList:erase(weaponIndex)
+			end
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -838,7 +841,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		Assert.Equals("string", type(class), "Argument #2")
 
 		try(function()
-			memedit:require().pawn.setWeaponClass(self, weaponIndex, class)
+			memedit:require().weapon.setClass(self, weaponIndex, class)
 		end)
 		:catch(function(err)
 			error(string.format(
