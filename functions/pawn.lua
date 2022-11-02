@@ -2,13 +2,13 @@
 function onPawnClassInitialized(BoardPawn, pawn)
 
 	BoardPawn.AddWeaponVanilla = pawn.AddWeapon
-	BoardPawn.AddWeapon = function(self, weaponId)
+	BoardPawn.AddWeapon = function(self, weaponId, forceEnable)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("string", type(weaponId), "Argument #1")
 		Assert.Equals({"nil", "boolean"}, type(forceActive), "Argument #2")
 
 		local memedit = memedit:get()
-		if memedit then
+		if memedit and forceEnable then
 			local weapon = _G[weaponId]
 
 			if weapon then
