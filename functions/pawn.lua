@@ -1,11 +1,28 @@
 
+-- Returns true if powerlist does not contain any 0
+local function isPowered(powerList)
+	local isPowered = true
+
+	for i = 0, powerList:size() - 1 do
+		if powerList:at(i) == 0 then
+			isPowered = false
+		end
+	end
+
+	return isPowered
+end
+
 function onPawnClassInitialized(BoardPawn, pawn)
 
 	-- Reference to overridden vanilla functions
 	BoardPawn.AddWeaponVanilla = pawn.AddWeapon
 	BoardPawn.GetArmedWeaponVanilla = BoardPawn.GetArmedWeapon
+	BoardPawn.GetEquippedWeaponsVanilla = BoardPawn.GetEquippedWeapons
+	BoardPawn.GetPoweredWeaponsVanilla = BoardPawn.GetPoweredWeapons
 	BoardPawn.IsJumperVanilla = pawn.IsJumper
 	BoardPawn.IsTeleporterVanilla = pawn.IsTeleporter
+	BoardPawn.IsWeaponEquippedVanilla = BoardPawn.IsWeaponEquipped
+	BoardPawn.IsWeaponPoweredVanilla = BoardPawn.IsWeaponPowered
 	BoardPawn.SetAcidVanilla = pawn.SetAcid
 	BoardPawn.SetFrozenVanilla = pawn.SetFrozen
 	BoardPawn.SetMechVanilla = pawn.SetMech
@@ -140,6 +157,32 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
+	BoardPawn.GetBaseWeaponTypes = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result = {}
+
+			try(function()
+				local weaponCount = self:GetWeaponCount()
+				for weaponIndex = 1, weaponCount do
+					result[i] = self:GetWeaponBaseType(weaponIndex)
+				end
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:GetEquippedWeaponsVanilla()
+	end
+
 	BoardPawn.GetImageOffset = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -246,6 +289,33 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end)
 
 		return result
+	end
+
+	BoardPawn.GetPoweredWeaponTypes = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result = {}
+
+			try(function()
+				for weaponIndex = 1, self:GetWeaponCount() do
+					if isPowered(memedit.weapon.getPowerList(self, weaponIndex)) then
+						result[weaponIndex] = self:GetWeaponType(weaponIndex)
+					end
+				end
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:GetPoweredWeaponsVanilla()
 	end
 
 	BoardPawn.GetQueuedTarget = function(self)
@@ -497,6 +567,87 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end)
 
 		return result
+	end
+
+	BoardPawn.IsBaseWeaponTypeEquipped = function(self, baseWeaponType)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("string", type(baseWeaponType), "Argument #1")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result = false
+
+			try(function()
+				for weaponIndex = 1, self:GetWeaponCount() do
+					if self:GetWeaponBaseType(weaponIndex) == baseWeaponType then
+						result = true
+						break
+					end
+				end
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:IsWeaponEquippedVanilla(baseWeaponType)
+	end
+
+	BoardPawn.IsWeaponTypePowered = function(self, weaponType)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("string", type(weaponType), "Argument #1")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result = false
+
+			try(function()
+				for weaponIndex = 1, self:GetWeaponCount() do
+					local weaponBaseType = self:GetWeaponBaseType(weaponIndex)
+					local base, suffix = weaponType:match("^("..weaponBaseType..")(.*)$")
+
+					if base == weaponBaseType then
+						local base, upg1, upg2
+
+						if suffix == "" then
+							base = true
+
+						elseif suffix == "_A" then
+							base, upg1 = true, true
+
+						elseif suffix == "_B" then
+							base, upg2 = true, true
+
+						elseif suffix == "_AB" then
+							base, upg1, upg2 = true, true, true
+						end
+
+						result = base and isPowered(memedit.weapon.getPowerList(self, weaponIndex))
+							and (not upg1 or isPowered(memedit.weapon.getUpgradeListA(self, weaponIndex)))
+							and (not upg2 or isPowered(memedit.weapon.getUpgradeListB(self, weaponIndex)))
+					end
+
+					if result then
+						break
+					end
+				end
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:IsWeaponPoweredVanilla(weaponType)
 	end
 
 	BoardPawn.RemoveWeapon = function(self, weaponIndex)
@@ -1006,6 +1157,10 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 	-- Aliases
 	BoardPawn.GetArmedWeapon = BoardPawn.GetArmedWeaponType
+	BoardPawn.GetEquippedWeapons = BoardPawn.GetBaseWeaponTypes
+	BoardPawn.GetPoweredWeapons = BoardPawn.GetPoweredWeaponTypes
+	BoardPawn.IsWeaponEquipped = BoardPawn.IsBaseWeaponTypeEquipped
+	BoardPawn.IsWeaponPowered = BoardPawn.IsWeaponTypePowered
 end
 
 modApi.events.onPawnClassInitialized:subscribe(onPawnClassInitialized)
