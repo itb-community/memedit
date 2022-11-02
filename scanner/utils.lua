@@ -164,6 +164,12 @@ local function getSavedUniqueBuilding()
 		mission.memedit = {}
 	end
 
+	if mission.memedit.uniqueBar then
+		if not Board:IsUniqueBuilding(mission.memedit.uniqueBar) then
+			mission.memedit.uniqueBar = nil
+		end
+	end
+
 	return mission.memedit.uniqueBar
 end
 
