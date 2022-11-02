@@ -1,7 +1,26 @@
 
 function onPawnClassInitialized(BoardPawn, pawn)
 
+	-- Reference to overridden vanilla functions
 	BoardPawn.AddWeaponVanilla = pawn.AddWeapon
+	BoardPawn.GetArmedWeaponVanilla = BoardPawn.GetArmedWeapon
+	BoardPawn.IsJumperVanilla = pawn.IsJumper
+	BoardPawn.IsTeleporterVanilla = pawn.IsTeleporter
+	BoardPawn.SetAcidVanilla = pawn.SetAcid
+	BoardPawn.SetFrozenVanilla = pawn.SetFrozen
+	BoardPawn.SetMechVanilla = pawn.SetMech
+	BoardPawn.SetShieldVanilla = pawn.SetShield
+
+
+	-- With the addition of BoardPawn.IsNeutral,
+	-- mod loader's BoardPawn.SetNeutral is no longer needed.
+	-- Revert mod loader's function override
+	if BoardPawn.SetNeutralVanilla then
+		BoardPawn.SetNeutral = BoardPawn.SetNeutralVanilla
+		BoardPawn.SetNeutralVanilla = nil
+	end
+
+
 	BoardPawn.AddWeapon = function(self, weaponId, forceEnable)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("string", type(weaponId), "Argument #1")
@@ -37,7 +56,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		self:AddWeaponVanilla(weaponId)
 	end
 
-	BoardPawn.GetArmedWeaponVanilla = BoardPawn.GetArmedWeapon
 	BoardPawn.GetArmedWeaponType = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -67,8 +85,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 		return self:GetArmedWeaponVanilla()
 	end
-
-	BoardPawn.GetArmedWeapon = BoardPawn.GetArmedWeaponType
 
 	BoardPawn.GetClass = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
@@ -838,7 +854,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 	-- Vanilla IsJumping checks if the unit type definition
 	-- has Jumper == true, instead of checking the class instance.
-	BoardPawn.IsJumperVanilla = pawn.IsJumper
 	BoardPawn.IsJumper = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -864,7 +879,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 	-- Vanilla IsTeleporter checks if the unit type definition
 	-- has Teleporter == true, instead of checking the class instance.
-	BoardPawn.IsTeleporterVanilla = pawn.IsTeleporter
 	BoardPawn.IsTeleporter = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -891,7 +905,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 	-- Board.SetSmoke has two parameter. Param #2 allows setting
 	-- smoke without an animation. Add this functionality to
 	-- Pawn.SetAcid.
-	BoardPawn.SetAcidVanilla = pawn.SetAcid
 	BoardPawn.SetAcid = function(self, acid, skipAnimation)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("boolean", type(acid), "Argument #1")
@@ -918,7 +931,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 	-- Board.SetSmoke has two parameter. Param #2 allows setting
 	-- smoke without an animation. Add this functionality to
 	-- Pawn.SetFrozen.
-	BoardPawn.SetFrozenVanilla = pawn.SetFrozen
 	BoardPawn.SetFrozen = function(self, frozen, skipAnimation)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("boolean", type(frozen), "Argument #1")
@@ -943,7 +955,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 	end
 
 	-- Vanilla Setmech can only set mech to true, not false.
-	BoardPawn.SetMechVanilla = pawn.SetMech
 	BoardPawn.SetMech = function(self, mech)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals({"nil", "boolean"}, type(mech), "Argument #1")
@@ -966,18 +977,9 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		self:SetMechVanilla()
 	end
 
-	-- With the addition of Board.IsNeutral,
-	-- mod loader's Board.SetNeutral is no longer needed.
-	-- Revert mod loader's function override
-	if BoardPawn.SetNeutralVanilla then
-		BoardPawn.SetNeutral = BoardPawn.SetNeutralVanilla
-		BoardPawn.SetNeutralVanilla = nil
-	end
-
 	-- Board.SetSmoke has two parameter. Param #2 allows setting
 	-- smoke without an animation. Add this functionality to
 	-- Pawn.SetShield.
-	BoardPawn.SetShieldVanilla = pawn.SetShield
 	BoardPawn.SetShield = function(self, shield, skipAnimation)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("boolean", type(shield), "Argument #1")
@@ -1000,6 +1002,10 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 		self:SetShieldVanilla(shield)
 	end
+
+
+	-- Aliases
+	BoardPawn.GetArmedWeapon = BoardPawn.GetArmedWeaponType
 end
 
 modApi.events.onPawnClassInitialized:subscribe(onPawnClassInitialized)
