@@ -437,6 +437,35 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
+	BoardPawn.IsBaseWeaponTypeEquipped = function(self, baseWeaponType)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("string", type(baseWeaponType), "Argument #1")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result = false
+
+			try(function()
+				for weaponIndex = 1, self:GetWeaponCount() do
+					if self:GetWeaponBaseType(weaponIndex) == baseWeaponType then
+						result = true
+						break
+					end
+				end
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:IsWeaponEquippedVanilla(baseWeaponType)
+	end
+
 	BoardPawn.IsInvisible = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -453,6 +482,31 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end)
 
 		return result
+	end
+
+	-- Vanilla IsJumping checks if the unit type definition
+	-- has Jumper == true, instead of checking the class instance.
+	BoardPawn.IsJumper = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local memedit = memedit:get()
+		if memedit then
+			local result
+
+			try(function()
+				result = memedit.pawn.isJumper(self)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:IsJumperVanilla()
 	end
 
 	BoardPawn.IsMassive = function(self)
@@ -569,21 +623,17 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
-	BoardPawn.IsBaseWeaponTypeEquipped = function(self, baseWeaponType)
+	-- Vanilla IsTeleporter checks if the unit type definition
+	-- has Teleporter == true, instead of checking the class instance.
+	BoardPawn.IsTeleporter = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals("string", type(baseWeaponType), "Argument #1")
 
 		local memedit = memedit:get()
 		if memedit then
-			local result = false
+			local result
 
 			try(function()
-				for weaponIndex = 1, self:GetWeaponCount() do
-					if self:GetWeaponBaseType(weaponIndex) == baseWeaponType then
-						result = true
-						break
-					end
-				end
+				result = memedit.pawn.isTeleporter(self)
 			end)
 			:catch(function(err)
 				error(string.format(
@@ -595,7 +645,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 			return result
 		end
 
-		return self:IsWeaponEquippedVanilla(baseWeaponType)
+		return self:IsTeleporterVanilla()
 	end
 
 	BoardPawn.IsWeaponTypePowered = function(self, weaponType)
@@ -666,6 +716,32 @@ function onPawnClassInitialized(BoardPawn, pawn)
 					tostring(err)
 			))
 		end)
+	end
+
+	-- Board.SetSmoke has two parameter. Param #2 allows setting
+	-- smoke without an animation. Add this functionality to
+	-- Pawn.SetAcid.
+	BoardPawn.SetAcid = function(self, acid, skipAnimation)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("boolean", type(acid), "Argument #1")
+		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #2")
+
+		local memedit = memedit:get()
+		if memedit and skipAnimation then
+			try(function()
+				memedit.pawn.setAcid(self, acid)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return
+		end
+
+		self:SetAcidVanilla(acid)
 	end
 
 	BoardPawn.SetBoosted = function(self, boosted)
@@ -741,6 +817,32 @@ function onPawnClassInitialized(BoardPawn, pawn)
 					tostring(err)
 			))
 		end)
+	end
+
+	-- Board.SetSmoke has two parameter. Param #2 allows setting
+	-- smoke without an animation. Add this functionality to
+	-- Pawn.SetFrozen.
+	BoardPawn.SetFrozen = function(self, frozen, skipAnimation)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("boolean", type(frozen), "Argument #1")
+		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #2")
+
+		local memedit = memedit:get()
+		if memedit and skipAnimation then
+			try(function()
+				memedit.pawn.setFrozen(self, frozen)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return
+		end
+
+		self:SetFrozenVanilla(frozen)
 	end
 
 	BoardPawn.SetImageOffset = function(self, imageOffset)
@@ -846,6 +948,29 @@ function onPawnClassInitialized(BoardPawn, pawn)
 					tostring(err)
 			))
 		end)
+	end
+
+	-- Vanilla Setmech can only set mech to true, not false.
+	BoardPawn.SetMech = function(self, mech)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals({"nil", "boolean"}, type(mech), "Argument #1")
+
+		local memedit = memedit:get()
+		if memedit and mech ~= nil then
+			try(function()
+				memedit.pawn.setMech(self, mech)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return
+		end
+
+		self:SetMechVanilla()
 	end
 
 	BoardPawn.SetMinor = function(self, minor)
@@ -1001,131 +1126,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 					tostring(err)
 			))
 		end)
-	end
-
-	-- Vanilla IsJumping checks if the unit type definition
-	-- has Jumper == true, instead of checking the class instance.
-	BoardPawn.IsJumper = function(self)
-		Assert.Equals("userdata", type(self), "Argument #0")
-
-		local memedit = memedit:get()
-		if memedit then
-			local result
-
-			try(function()
-				result = memedit.pawn.isJumper(self)
-			end)
-			:catch(function(err)
-				error(string.format(
-						"memedit.dll: %s",
-						tostring(err)
-				))
-			end)
-
-			return result
-		end
-
-		return self:IsJumperVanilla()
-	end
-
-	-- Vanilla IsTeleporter checks if the unit type definition
-	-- has Teleporter == true, instead of checking the class instance.
-	BoardPawn.IsTeleporter = function(self)
-		Assert.Equals("userdata", type(self), "Argument #0")
-
-		local memedit = memedit:get()
-		if memedit then
-			local result
-
-			try(function()
-				result = memedit.pawn.isTeleporter(self)
-			end)
-			:catch(function(err)
-				error(string.format(
-						"memedit.dll: %s",
-						tostring(err)
-				))
-			end)
-
-			return result
-		end
-
-		return self:IsTeleporterVanilla()
-	end
-
-	-- Board.SetSmoke has two parameter. Param #2 allows setting
-	-- smoke without an animation. Add this functionality to
-	-- Pawn.SetAcid.
-	BoardPawn.SetAcid = function(self, acid, skipAnimation)
-		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals("boolean", type(acid), "Argument #1")
-		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #2")
-
-		local memedit = memedit:get()
-		if memedit and skipAnimation then
-			try(function()
-				memedit.pawn.setAcid(self, acid)
-			end)
-			:catch(function(err)
-				error(string.format(
-						"memedit.dll: %s",
-						tostring(err)
-				))
-			end)
-
-			return
-		end
-
-		self:SetAcidVanilla(acid)
-	end
-
-	-- Board.SetSmoke has two parameter. Param #2 allows setting
-	-- smoke without an animation. Add this functionality to
-	-- Pawn.SetFrozen.
-	BoardPawn.SetFrozen = function(self, frozen, skipAnimation)
-		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals("boolean", type(frozen), "Argument #1")
-		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #2")
-
-		local memedit = memedit:get()
-		if memedit and skipAnimation then
-			try(function()
-				memedit.pawn.setFrozen(self, frozen)
-			end)
-			:catch(function(err)
-				error(string.format(
-						"memedit.dll: %s",
-						tostring(err)
-				))
-			end)
-
-			return
-		end
-
-		self:SetFrozenVanilla(frozen)
-	end
-
-	-- Vanilla Setmech can only set mech to true, not false.
-	BoardPawn.SetMech = function(self, mech)
-		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals({"nil", "boolean"}, type(mech), "Argument #1")
-
-		local memedit = memedit:get()
-		if memedit and mech ~= nil then
-			try(function()
-				memedit.pawn.setMech(self, mech)
-			end)
-			:catch(function(err)
-				error(string.format(
-						"memedit.dll: %s",
-						tostring(err)
-				))
-			end)
-
-			return
-		end
-
-		self:SetMechVanilla()
 	end
 
 	-- Board.SetSmoke has two parameter. Param #2 allows setting
