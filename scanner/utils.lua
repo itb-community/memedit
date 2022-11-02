@@ -18,7 +18,7 @@ function utils.inheritClass(from, to)
 end
 
 function utils.boardExists()
-	if Board == nil then
+	if Board == nil or GetCurrentMission() == nil then
 		return false, "Enter a mission"
 	elseif Board:IsBusy() then
 		return false, "Wait..."
@@ -28,7 +28,7 @@ function utils.boardExists()
 end
 
 function utils.missionBoardExists()
-	if Board == nil then
+	if Board == nil or GetCurrentMission() == nil then
 		return false, "Enter a mission"
 	elseif Board:IsMissionBoard() == nil then
 		return false, "Enter a real mission"
