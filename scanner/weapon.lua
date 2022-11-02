@@ -5,7 +5,7 @@ local utils = require(path.."utils")
 
 local inheritClass = utils.inheritClass
 local prepareScanPawn = utils.prepareScanPawn
-local prepareScanWeapon = utils.prepareScanPawn
+local prepareScanWeapon = utils.prepareScanWeapon
 local weaponPrerequisites = {
 	"vital.size_pawn",
 	"vital.size_weapon",

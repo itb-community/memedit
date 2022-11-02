@@ -137,7 +137,7 @@ scans.highlighted = inheritClass(Scan, {
 			end
 
 			if pawn then
-				self.instruction = "Hover tiles with the provided memedit_scanPawn's Move skill"
+				self.instruction = "Hover tiles with the provided ScanPawn's Move skill"
 			else
 				self.instruction = waitInstruction
 			end

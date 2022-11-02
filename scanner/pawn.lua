@@ -43,7 +43,7 @@ scans.active = inheritClass(Scan, {
 	dataType = "bool",
 	actions = {
 		function(self)
-			prepareScanPawn{ SkillList = {"memedit_scanWeapon"} }
+			prepareScanPawn{ SkillList = {"memedit_weapon"} }
 			local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 			local isActive = math.random(0,1) == 1
 			pawn:SetActive(isActive)
@@ -121,11 +121,11 @@ scans.boosted = inheritClass(Scan, {
 			end
 
 			if isBoosted == 1 then
-				mech:AddWeapon("memedit_scanWeapon")
+				mech:AddWeapon("memedit_weapon")
 				mech:AddWeapon("Passive_FireBoost")
 				Board:SetFire(p, true)
 			else
-				mech:AddWeapon("memedit_scanWeapon")
+				mech:AddWeapon("memedit_weapon")
 				mech:FireWeapon(p, 1)
 			end
 
@@ -494,9 +494,9 @@ scans.movementSpent = inheritClass(Scan, {
 
 		if pawn then
 			if pawn:IsUndoPossible() then
-				self.instruction = "Undo move with the provided memedit_scanPawn"
+				self.instruction = "Undo move with the provided ScanPawn"
 			else
-				self.instruction = "Move the provided memedit_scanPawn"
+				self.instruction = "Move the provided ScanPawn"
 			end
 		else
 			self.instruction = waitInstruction
@@ -633,7 +633,7 @@ scans.queuedTargetX = inheritClass(Scan, {
 		local p1 = randomCleanPoint()
 		local p2 = randomCleanPoint()
 
-		prepareScanPawn{ SkillList = {"memedit_scanWeaponQueued"} }
+		prepareScanPawn{ SkillList = {"memedit_weaponQueued"} }
 		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		Board:AddPawn(pawn, p1)
@@ -661,7 +661,7 @@ scans.queuedTargetY = inheritClass(Scan, {
 		local p1 = randomCleanPoint()
 		local p2 = randomCleanPoint()
 
-		prepareScanPawn{ SkillList = {"memedit_scanWeaponQueued"} }
+		prepareScanPawn{ SkillList = {"memedit_weaponQueued"} }
 		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
 
 		Board:AddPawn(pawn, p1)
@@ -767,7 +767,7 @@ scans.undoX = inheritClass(Scan, {
 		end
 
 		if pawn then
-			self.instruction = "Move the provided memedit_scanPawn"
+			self.instruction = "Move the provided ScanPawn"
 		else
 			self.instruction = waitInstruction
 		end
@@ -805,7 +805,7 @@ scans.undoY = inheritClass(Scan, {
 		end
 
 		if pawn then
-			self.instruction = "Move the provided memedit_scanPawn"
+			self.instruction = "Move the provided ScanPawn"
 		else
 			self.instruction = waitInstruction
 		end

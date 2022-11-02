@@ -79,15 +79,15 @@ function utils.prepareScanPawn(def)
 	end
 end
 
--- Resets the definition of memedit_weapon and
+-- Resets the definition of memedit_scanWeapon and
 -- applies the new definition onto it.
 function utils.prepareScanWeapon(def)
-	for i,v in pairs(memedit_weapon) do
-		memedit_weapon[i] = nil
+	for i,v in pairs(memedit_scanWeapon) do
+		memedit_scanWeapon[i] = nil
 	end
 
 	for i,v in pairs(def or {}) do
-		memedit_weapon[i] = v
+		memedit_scanWeapon[i] = v
 	end
 end
 
@@ -265,7 +265,7 @@ function utils.requireScanMovePawn()
 			Health = 9,
 			Flying = true,
 			DefaultTeam = TEAM_PLAYER,
-			SkillList = {"memedit_scanWeaponReset"},
+			SkillList = {"memedit_weaponReset"},
 		}
 
 		scanMovePawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")

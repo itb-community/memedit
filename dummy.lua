@@ -1,16 +1,23 @@
 
 -- Dummy objects used for scanning memory.
 
+-- Dynamic objects
 memedit_scanPawn = Pawn:new{}
-memedit_weaponPawn = Pawn:new{ SkillList = {"memedit_scanWeapon"} }
 memedit_scanItem = {Image = "", Damage = SpaceDamage(), Tooltip = "", Icon = "", UsedImage = ""}
-memedit_scanWeapon= Skill:new{}
-memedit_scanWeaponReset = memedit_scanWeapon:new{
+memedit_scanWeapon = Skill:new{}
+memedit_scanWeapon_A = memedit_scanWeapon:new{}
+memedit_scanWeapon_B = memedit_scanWeapon:new{}
+memedit_scanWeapon_AB = memedit_scanWeapon:new{}
+
+-- Static objects
+memedit_weapon = Skill:new{}
+memedit_weaponPawn = Pawn:new{ SkillList = {"memedit_weapon"} }
+memedit_weaponReset = memedit_weapon:new{
 	Name = "Reset Scan Pawn",
 	Description = "Remove the current Scan Pawn, and retry.",
 }
 
-function memedit_scanWeapon:GetTargetArea(p)
+function memedit_weapon:GetTargetArea(p)
 	local ret = PointList()
 
 	for i,p in ipairs(Board) do
@@ -20,7 +27,7 @@ function memedit_scanWeapon:GetTargetArea(p)
 	return ret
 end
 
-function memedit_scanWeapon:GetSkillEffect(p1, p2)
+function memedit_weapon:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 
 	ret:AddDamage(SpaceDamage(p2))
@@ -28,9 +35,9 @@ function memedit_scanWeapon:GetSkillEffect(p1, p2)
 	return ret
 end
 
-memedit_scanWeaponQueued = memedit_scanWeapon:new{}
+memedit_weaponQueued = memedit_weapon:new{}
 
-function memedit_scanWeaponQueued:GetSkillEffect(p1, p2)
+function memedit_weaponQueued:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 
 	ret:AddQueuedDamage(SpaceDamage(p2))
@@ -39,7 +46,7 @@ function memedit_scanWeaponQueued:GetSkillEffect(p1, p2)
 end
 
 memedit_scanMove = Move:new{}
-memedit_scanMove.GetTargetArea = memedit_scanWeapon.GetTargetArea
+memedit_scanMove.GetTargetArea = memedit_weapon.GetTargetArea
 
 function memedit_scanMove:TeardownEvent()
 	if self.Teardown then
