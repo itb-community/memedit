@@ -5,6 +5,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
+		if not self:IsValid(loc) then
+			return FIRE_TYPE_NONE
+		end
+
 		local result
 
 		try(function()
@@ -29,8 +33,8 @@ local function onBoardClassInitialized(BoardClass, board)
 
 			try(function()
 				result = Point(
-					memedit.board.getHighlightedX(loc),
-					memedit.board.getHighlightedY(loc)
+					memedit.board.getHighlightedX(),
+					memedit.board.getHighlightedY()
 				)
 			end)
 			:catch(function(err)
@@ -54,6 +58,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
+		if not self:IsValid(loc) then
+			return 0
+		end
+
 		local result
 
 		try(function()
@@ -72,6 +80,10 @@ local function onBoardClassInitialized(BoardClass, board)
 	BoardClass.GetTerrainIcon = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
+
+		if not self:IsValid(loc) then
+			return ""
+		end
 
 		local result
 
@@ -92,6 +104,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
+		if not self:IsValid(loc) then
+			return ""
+		end
+
 		local result
 
 		try(function()
@@ -110,6 +126,10 @@ local function onBoardClassInitialized(BoardClass, board)
 	BoardClass.IsForest = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
+
+		if not self:IsValid(loc) then
+			return false
+		end
 
 		local result
 
@@ -136,6 +156,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
+		if not self:IsValid(loc) then
+			return false
+		end
+
 		local result
 
 		try(function()
@@ -154,6 +178,10 @@ local function onBoardClassInitialized(BoardClass, board)
 	BoardClass.IsHighlighted = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
+
+		if not self:IsValid(loc) then
+			return false
+		end
 
 		local memedit = memedit:get()
 		if memedit then
@@ -183,6 +211,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
+		if not self:IsValid(loc) then
+			return false
+		end
+
 		local result
 
 		try(function()
@@ -205,6 +237,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.TypePoint(loc, "Argument #1")
 		Assert.Equals("boolean", type(shield), "Argument #2")
 		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #3")
+
+		if not self:IsValid(loc) then
+			return
+		end
 
 		local memedit = memedit:get()
 		if memedit and skipAnimation then
@@ -244,6 +280,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 		Assert.Equals("string", type(structureId), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
 
 		local terrains = { [loc.y * self:GetSize().x + loc.x + 1] = self:GetTerrain(loc) }
 		local memedit = memedit:get()
@@ -298,7 +338,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #3")
 
 		local memedit = memedit:get()
-		if memedit and skipAnimation then
+		if memedit and skipAnimation and self:IsValid(loc) then
 			try(function()
 				memedit.board.setAcid(loc, acid)
 			end)
@@ -325,7 +365,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #3")
 
 		local memedit = memedit:get()
-		if memedit and skipAnimation then
+		if memedit and skipAnimation and self:IsValid(loc) then
 			try(function()
 				local terrain = memedit.board.getTerrain(loc)
 				local customTile = self:GetCustomTile(loc)
