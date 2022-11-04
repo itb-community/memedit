@@ -129,7 +129,7 @@ local function createUi(screen, uiRoot)
 	local scrollarea = UiScrollArea()
 		:width(1):height(1)
 		:padding(10)
-		:setVar("ignoreMouse", true)
+		:setVar("translucent", true)
 		:addTo(innerFrame)
 
 	-- STATS
