@@ -31,12 +31,31 @@ local function modIsMemedit(mod)
 	return mod.id == "memedit"
 end
 
+local function modIsAncestorOfMemedit(mod)
+	if modIsMemedit(mod) then
+		return true
+	end
+
+	local children = mod.children
+	if children then
+		for _, id in ipairs(children) do
+			local child = mod_loader.mods[id]
+			if modIsAncestorOfMemedit(child) then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
 local function getOtherEnabledMods()
 	local enabledMods = mod_loader:orderMods(mod_loader:getModConfig(),{})
-	for i, id in ipairs(enabledMods) do
-		if id == "memedit" then
+	for i = #enabledMods, 1, -1 do
+		local id = enabledMods[i]
+		local mod = mod_loader.mods[id]
+		if modIsAncestorOfMemedit(mod) then
 			table.remove(enabledMods, i)
-			break
 		end
 	end
 
@@ -92,7 +111,7 @@ local function disableOtherMods()
 		function(obj)
 			for modId, modOptions in pairs(obj.modOptions) do
 				local mod = mod_loader.mods[modId]
-				if mod and not modIsMemedit(mod) then
+				if mod and not modIsAncestorOfMemedit(mod) then
 					-- Update cache and file
 					modConfiguration[modId].enabled = false
 					modOptions.enabled = false
