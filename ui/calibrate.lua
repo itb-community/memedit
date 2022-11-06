@@ -47,6 +47,11 @@ local function modDependOnMemedit(mod)
 	for id, version in pairs(mod.dependencies) do
 		if id == "memedit" then
 			return true
+		else
+			local dependency = mod_loader.mods[id]
+			if dependency and modDependOnMemedit(dependency) then
+				return true
+			end
 		end
 	end
 
