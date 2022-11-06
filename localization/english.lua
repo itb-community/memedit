@@ -5,7 +5,7 @@ return {
 	["Memedit_Title_Results"] = "#Results",
 	["Memedit_Title_Instructions"] = "Instructions",
 	["Memedit_Text_Recommend"] = ""
-		.."Memedit could not find addresses for the current game version and need to be calibrated!\n\n"
+		.."Memedit could not find addresses for the current game version and needs to be calibrated!\n\n"
 		.."You need to disable all other mods and restart the game before calibration can start.\n\n"
 		.."Disable the following mods:\n%s",
 	["Memedit_Text_Ready"] = ""
