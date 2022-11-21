@@ -418,6 +418,44 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
+	BoardPawn.GetWeaponLimitedRemaining = function(self, weaponIndex)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().weapon.getLimitedRemaining(self, weaponIndex)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardPawn.GetWeaponLimitedUses = function(self, weaponIndex)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().weapon.getLimitedUses(self, weaponIndex)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardPawn.GetWeaponType = function(self, weaponIndex)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("number", type(weaponIndex), "Argument #1")
@@ -1119,6 +1157,38 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 		try(function()
 			memedit:require().weapon.setClass(self, weaponIndex, class)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardPawn.SetWeaponLimitedRemaining = function(self, weaponIndex, remaining)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+		Assert.Equals("number", type(remaining), "Argument #2")
+
+		try(function()
+			memedit:require().weapon.setLimitedRemaining(self, weaponIndex, remaining)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardPawn.SetWeaponLimitedUses = function(self, weaponIndex, uses)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(weaponIndex), "Argument #1")
+		Assert.Equals("number", type(uses), "Argument #2")
+
+		try(function()
+			memedit:require().weapon.setLimitedUses(self, weaponIndex, uses)
 		end)
 		:catch(function(err)
 			error(string.format(

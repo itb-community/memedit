@@ -4,6 +4,8 @@ local Scan = require(path.."scan")
 local utils = require(path.."utils")
 
 local inheritClass = utils.inheritClass
+local boardExists = utils.boardExists
+local cleanPoint = utils.cleanPoint
 local prepareScanPawn = utils.prepareScanPawn
 local prepareScanWeapon = utils.prepareScanWeapon
 local weaponPrerequisites = {
@@ -67,6 +69,58 @@ scans.powerCost = inheritClass(Scan, {
 
 		self:searchWeapon(pawn, weaponIndex, cores)
 		self:evaluateResults()
+	end
+})
+
+scans.limitedUses = inheritClass(Scan, {
+	id = "LimitedUses",
+	name = "Weapon Limited Uses",
+	prerequisiteScans = weaponPrerequisites,
+	access = "RW",
+	dataType = "int",
+	action = function(self)
+		local limited = math.random(7,13)
+		prepareScanWeapon{ Limited = limited }
+		prepareScanPawn{ SkillList = {"memedit_scanWeapon"} }
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
+		local weaponIndex = 1
+
+		self:searchWeapon(pawn, weaponIndex, limited)
+		self:evaluateResults()
+	end
+})
+
+scans.limitedRemaining = inheritClass(Scan, {
+	id = "LimitedRemaining",
+	name = "Weapon Limited Remaining",
+	prerequisiteScans = weaponPrerequisites,
+	access = "RW",
+	dataType = "int",
+	condition = boardExists,
+	action = function(self)
+		local remaining = math.random(7,13)
+		prepareScanWeapon{
+			Limited = remaining,
+			GetTargetArea = memedit_weapon.GetTargetArea,
+			GetSkillEffect = memedit_weapon.GetSkillEffect
+		}
+		prepareScanPawn{
+			Flying = true,
+			SkillList = {"memedit_scanWeapon"}
+		}
+		local weaponIndex = 1
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
+		pawn:ResetUses()
+
+		local p = cleanPoint()
+		Board:AddPawn(pawn, p)
+		local target = cleanPoint()
+		pawn:FireWeapon(target, weaponIndex)
+
+		self:searchWeapon(pawn, weaponIndex, remaining - 1)
+		self:evaluateResults()
+
+		Board:RemovePawn(pawn)
 	end
 })
 
