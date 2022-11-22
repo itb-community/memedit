@@ -2,8 +2,8 @@
 local extension = {
 	id = "memedit",
 	name = "memedit",
-	version = "1.0.0",
-	modApiVersion = "2.8.2",
+	version = "1.0.1",
+	modApiVersion = "2.8.3",
 	gameVersion = "1.2.83",
 	isExtension = true,
 	enabled = false,
