@@ -155,6 +155,23 @@ scans.highlighted = inheritClass(Scan, {
 	end,
 })
 
+scans.item = inheritClass(Scan, {
+	id = "Item",
+	name = "Tile Item",
+	prerequisiteScans = tilePreRequisites,
+	access = "W",
+	dataType = "string",
+	condition = boardExists,
+	action = function(self)
+		local p = randomCleanPoint()
+		local item = "memedit_scanItem"
+		Board:SetItem(p, item)
+		self:searchTile(p, item)
+		self:evaluateResults()
+		Board:ClearSpace(p)
+	end
+})
+
 scans.maxHealth = inheritClass(Scan, {
 	id = "MaxHealth",
 	name = "Tile Max Health",

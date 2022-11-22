@@ -230,6 +230,25 @@ local function onBoardClassInitialized(BoardClass, board)
 		return result
 	end
 
+	BoardClass.RemoveItem = function(self, loc)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+
+		if not self:IsValid(loc) then
+			return false
+		end
+
+		try(function()
+			result = memedit:require().board.setItem(loc, "")
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
 	-- SetSmoke has two parameter. Param #2 allows setting smoke
 	-- without an animation. Add this functionality to SetShield.
 	BoardClass.SetShield = function(self, loc, shield, skipAnimation)
