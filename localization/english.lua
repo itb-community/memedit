@@ -3,7 +3,7 @@ return {
 	["Memedit_Title_CurrentScan"] = "Current Scan",
 	["Memedit_Title_Iteration"] = "#i",
 	["Memedit_Title_Results"] = "#Results",
-	["Memedit_Title_Instructions"] = "Instructions",
+	["Memedit_Title_Instructions"] = "Player Instructions (YOU do this)",
 	["Memedit_Text_Recommend"] = ""
 		.."Memedit could not find addresses for the current game version and needs to be calibrated!\n\n"
 		.."You need to disable all other mods and restart the game before calibration can start.\n\n"
