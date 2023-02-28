@@ -782,19 +782,23 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		self:SetAcidVanilla(acid)
 	end
 
-	BoardPawn.SetBoosted = function(self, boosted)
-		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals("boolean", type(boosted), "Argument #1")
+	-- Use memEdit for SetBoosted prior to 1.2.88,
+	-- when vanilla SetBoosted was added.
+	if modApi:isVersionBelow(modApi:getGameVersion(), "1.2.88") then
+		BoardPawn.SetBoosted = function(self, boosted)
+			Assert.Equals("userdata", type(self), "Argument #0")
+			Assert.Equals("boolean", type(boosted), "Argument #1")
 
-		try(function()
-			memedit:require().pawn.setBoosted(self, boosted)
-		end)
-		:catch(function(err)
-			error(string.format(
-					"memedit.dll: %s",
-					tostring(err)
-			))
-		end)
+			try(function()
+				memedit:require().pawn.setBoosted(self, boosted)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+		end
 	end
 
 	BoardPawn.SetClass = function(self, class)
