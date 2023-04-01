@@ -260,6 +260,19 @@ local Scan = newClass{
 		self:search(weaponAddr, 0, vital.size_weapon, val, dataType)
 	end,
 
+	searchSpaceDamage = function(self, spaceDamage, val, dataType)
+		local vital = self.scanner.output.vital
+
+		if false
+			or spaceDamage == nil
+			or vital.size_space_damage == nil
+		then
+			return
+		end
+
+		self:search(spaceDamage, 0, vital.size_space_damage, val, dataType)
+	end,
+
 	evaluateResults = function(self)
 		if self.results == nil then
 			self:fail()
