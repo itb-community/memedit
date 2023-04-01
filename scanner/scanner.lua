@@ -11,6 +11,7 @@ Scanner.scandefs = {
 	board = require(path.."board"),
 	tile = require(path.."tile"),
 	-- game = require(path.."game"),
+	spaceDamage = require(path.."spaceDamage"),
 }
 
 local AccessEnum = {

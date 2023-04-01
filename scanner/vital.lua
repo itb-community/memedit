@@ -223,4 +223,27 @@ scans.weaponObjSize = inheritClass(Scan, {
 	end,
 })
 
+-- The SpaceDamage object size is used as a limit
+-- when scanning for values in SpaceDamage objects.
+-- It is not absolutely vital to have this be 100%
+-- accurate. But it is trivial to create a lot of
+-- SpaceDamage objects and measure the distance
+-- between them in memory.
+scans.spaceDamageObjSize = inheritClass(Scan, {
+	id = "size_space_damage",
+	name = "SpaceDamage Object Size",
+	-- Overshoot to be on the safe side.
+	objectCount = 1000,
+	action = function(self)
+		local arr = {}
+
+		for i = 1, self.objectCount do
+			local spaceDamage = SpaceDamage()
+			arr[#arr+1] = memedit.dll.debug.getObjAddr(spaceDamage)
+		end
+
+		self:succeed(findSmallestGap(arr))
+	end
+})
+
 return scans
