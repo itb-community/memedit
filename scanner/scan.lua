@@ -16,6 +16,7 @@ local memsize = {
 	unsigned_int = 4,
 	byte = 1,
 	bool = 1,
+	float = 4,
 	double = 8,
 	string = 4,
 }
@@ -134,6 +135,7 @@ local Scan = newClass{
 			int = dll.debug.getAddrInt,
 			bool = dll.debug.getAddrBool,
 			byte = dll.debug.getAddrByte,
+			float = dll.debug.getAddrFloat,
 			-- getAddrValue is much safer than getAddrString.
 			-- getAddrValue will return a string if possible.
 			-- getAddrString can cause crashes when used on
