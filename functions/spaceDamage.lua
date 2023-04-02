@@ -1,4 +1,19 @@
 
+function SpaceDamage:GetProjectileArt()
+	Assert.Equals("userdata", type(self), "Argument #0")
+
+	local result
+
+	try(function()
+		result = memedit:require().spaceDamage.getProjectileArt(self)
+	end)
+	:catch(function(err)
+		error("memedit.dll: "..tostring(err))
+	end)
+
+	return result
+end
+
 
 function SpaceDamage:GetSource()
 	Assert.Equals("userdata", type(self), "Argument #0")
@@ -20,28 +35,13 @@ function SpaceDamage:GetSource()
 end
 
 
-function SpaceDamage:SetSource(source)
-	Assert.Equals("userdata", type(self), "Argument #0")
-	Assert.TypePoint(source, "Argument #1")
-
-	try(function()
-		local memedit = memedit:require()
-		memedit.spaceDamage.setSourceX(self, source.x)
-		memedit.spaceDamage.setSourceY(self, source.y)
-	end)
-	:catch(function(err)
-		error("memedit.dll: "..tostring(err))
-	end)
-end
-
-
-function SpaceDamage:GetProjectileArt()
+function SpaceDamage:GetType()
 	Assert.Equals("userdata", type(self), "Argument #0")
 
 	local result
 
 	try(function()
-		result = memedit:require().spaceDamage.getProjectileArt(self)
+		result = memedit:require().spaceDamage.getType(self)
 	end)
 	:catch(function(err)
 		error("memedit.dll: "..tostring(err))
@@ -64,19 +64,18 @@ function SpaceDamage:SetProjectileArt(projectileArt)
 end
 
 
-function SpaceDamage:GetType()
+function SpaceDamage:SetSource(source)
 	Assert.Equals("userdata", type(self), "Argument #0")
-
-	local result
+	Assert.TypePoint(source, "Argument #1")
 
 	try(function()
-		result = memedit:require().spaceDamage.getType(self)
+		local memedit = memedit:require()
+		memedit.spaceDamage.setSourceX(self, source.x)
+		memedit.spaceDamage.setSourceY(self, source.y)
 	end)
 	:catch(function(err)
 		error("memedit.dll: "..tostring(err))
 	end)
-
-	return result
 end
 
 

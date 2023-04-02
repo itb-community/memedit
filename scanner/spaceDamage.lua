@@ -7,6 +7,24 @@ local POINT_ZERO = Point(0,0)
 local inheritClass = utils.inheritClass
 local scans = {}
 
+
+scans.projectileArt = inheritClass(Scan, {
+	id = "ProjectileArt",
+	name = "SpaceDamage ProjectileArt",
+	prerequisiteScans = {"vital.size_space_damage"},
+	access = "RW",
+	dataType = "string",
+	action = function(self)
+		local projectileArt = "find_me"
+		local fx = SkillEffect()
+		fx:AddProjectile(POINT_ZERO, SpaceDamage(POINT_ZERO), projectileArt, NO_DELAY)
+
+		self:searchSpaceDamage(fx.effect:back(), projectileArt)
+		self:evaluateResults()
+	end
+})
+
+
 scans.sourceX = inheritClass(Scan, {
 	id = "SourceX",
 	name = "SpaceDamage SourceX",
@@ -22,6 +40,7 @@ scans.sourceX = inheritClass(Scan, {
 		self:evaluateResults()
 	end
 })
+
 
 scans.sourceY = inheritClass(Scan, {
 	id = "SourceY",
@@ -39,21 +58,6 @@ scans.sourceY = inheritClass(Scan, {
 	end
 })
 
-scans.projectileArt = inheritClass(Scan, {
-	id = "ProjectileArt",
-	name = "SpaceDamage ProjectileArt",
-	prerequisiteScans = {"vital.size_space_damage"},
-	access = "RW",
-	dataType = "string",
-	action = function(self)
-		local projectileArt = "find_me"
-		local fx = SkillEffect()
-		fx:AddProjectile(POINT_ZERO, SpaceDamage(POINT_ZERO), projectileArt, NO_DELAY)
-
-		self:searchSpaceDamage(fx.effect:back(), projectileArt)
-		self:evaluateResults()
-	end
-})
 
 scans.type = inheritClass(Scan, {
 	id = "Type",
@@ -82,5 +86,6 @@ scans.type = inheritClass(Scan, {
 		self:evaluateResults()
 	end
 })
+
 
 return scans
