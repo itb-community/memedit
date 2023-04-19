@@ -237,6 +237,55 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
+	BoardPawn.GetMutationVanilla = BoardPawn.GetMutation
+	BoardPawn.GetMutation = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local memedit = memedit:get()
+
+		if memedit then
+			local result
+
+			try(function()
+				result = memedit:require().pawn.getMutation(self)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return result
+		end
+
+		return self:GetMutationVanilla()
+	end
+
+	BoardPawn.IsMutationVanilla = BoardPawn.IsMutation
+	BoardPawn.IsMutation = function(self, predicate)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(predicate), "Argument #1")
+
+		local memedit = memedit:get()
+
+		if memedit then
+			local mutation = self:GetMutation()
+			local isLeaderMutation = false
+				or predicate == LEADER_HEALTH
+				or predicate == LEADER_REGEN
+				or predicate == LEADER_EXPLODE
+
+			if mutation == LEADER_BOSS and isLeaderMutation then
+				predicate = LEADER_BOSS
+			end
+
+			return predicate == mutation
+		end
+
+		return self:IsMutationVanilla(predicate)
+	end
+	
 	BoardPawn.GetMaxBaseHealth = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
