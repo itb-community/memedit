@@ -247,7 +247,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 			local result
 
 			try(function()
-				result = memedit:require().pawn.getMutation(self)
+				result = memedit.pawn.getMutation(self)
 			end)
 			:catch(function(err)
 				error(string.format(
