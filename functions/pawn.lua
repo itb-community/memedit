@@ -237,6 +237,24 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return result
 	end
 
+	BoardPawn.GetMutation = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local result
+
+		try(function()
+			result = memedit:require().pawn.getMutation(self)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardPawn.GetMaxBaseHealth = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 

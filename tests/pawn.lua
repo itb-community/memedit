@@ -236,6 +236,26 @@ testsuite.test_Pawn_Leader = function()
 	return true
 end
 
+testsuite.test_Pawn_Mutation = function()
+	local memedit = memedit:get()
+
+	if memedit then
+		local mutation = LEADER_NONE
+		local pawn = PAWN_FACTORY:CreatePawn("Scorpion1")
+
+		Assert.Equals(mutation, pawn:GetMutation())
+
+		pawn:SetMutation(LEADER_ARMOR)
+		Assert.Equals(LEADER_ARMOR, pawn:GetMutation())
+	else
+		local pawn = PAWN_FACTORY:CreatePawn("Scorpion1")
+		Assert.ShouldError(pawn.GetMutation, {pawn}, "Function should fail without memedit")
+		Assert.ShouldError(pawn.SetMutation, {pawn, LEADER_ARMOR}, "Function should fail without memedit")
+	end
+
+	return true
+end
+
 testsuite.test_Pawn_Massive = function()
 	local memedit = memedit:get()
 
