@@ -90,7 +90,7 @@ function SpaceDamage:GetSource()
 
 	try(function()
 		local memedit = memedit:require()
-		return Point(
+		result = Point(
 			memedit.spaceDamage.getSourceX(self),
 			memedit.spaceDamage.getSourceY(self)
 		)
