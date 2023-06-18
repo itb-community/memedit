@@ -221,6 +221,22 @@ local Scan = newClass{
 		self:search(boardAddr, 0, vital.size_board, val, dataType)
 	end,
 
+	searchGame = function(self, val, dataType)
+		local dll = memedit.dll
+		local vital = self.scanner.output.vital
+
+		if false
+			or Game == nil
+			or vital.size_game == nil
+		then
+			return
+		end
+
+		local gameAddr = dll.debug.getObjAddr(Game)
+
+		self:search(gameAddr, 0, vital.size_game, val, dataType)
+	end,
+
 	searchTile = function(self, p, val, dataType)
 		local dll = memedit.dll
 		local vital = self.scanner.output.vital
