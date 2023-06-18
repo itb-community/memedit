@@ -33,7 +33,7 @@ scans.resist = inheritClass(Scan, {
 				Game:ModifyPowerGrid(SERIOUSLY_JUST_ONE)
 			end
 
-			Game:ModifyPowerGrid(1)
+			Game:ModifyPowerGrid(SERIOUSLY_JUST_ONE)
 
 			if mission.memedit.resist < 10 then
 				mission.memedit.resist = mission.memedit.resist + 2
