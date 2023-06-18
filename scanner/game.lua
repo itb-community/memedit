@@ -16,14 +16,12 @@ scans.resist = inheritClass(Scan, {
 	dataType = "int",
 	condition = missionBoardExists,
 	action = function(self)
-		local mission = GetCurrentMission()
-
-		if mission.memedit == nil then
-			mission.memedit = {}
+		if GAME.memedit == nil then
+			GAME.memedit = {}
 		end
 
-		if mission.memedit.resist == nil then
-			mission.memedit.resist = 0
+		if GAME.memedit.resist == nil then
+			GAME.memedit.resist = 0
 		else
 			local power = Game:GetPower()
 			local diff = power:GetMax() - power:GetValue()
@@ -35,14 +33,14 @@ scans.resist = inheritClass(Scan, {
 
 			Game:ModifyPowerGrid(SERIOUSLY_JUST_ONE)
 
-			if mission.memedit.resist < 10 then
-				mission.memedit.resist = mission.memedit.resist + 2
-			elseif mission.memedit.resist < 25 then
-				mission.memedit.resist = mission.memedit.resist + 1
+			if GAME.memedit.resist < 10 then
+				GAME.memedit.resist = GAME.memedit.resist + 2
+			elseif GAME.memedit.resist < 25 then
+				GAME.memedit.resist = GAME.memedit.resist + 1
 			end
 		end
 
-		self:searchGame(mission.memedit.resist)
+		self:searchGame(GAME.memedit.resist)
 		self:evaluateResults()
 	end
 })
