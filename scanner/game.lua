@@ -28,8 +28,9 @@ scans.resist = inheritClass(Scan, {
 			local power = Game:GetPower()
 			local diff = power:GetMax() - power:GetValue()
 
-			if diff > 0 then
-				Game:ModifyPowerGrid(diff)
+			while diff > 0 do
+				diff = diff - 1
+				Game:ModifyPowerGrid(SERIOUSLY_JUST_ONE)
 			end
 
 			Game:ModifyPowerGrid(1)
