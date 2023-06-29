@@ -114,10 +114,16 @@ scans.attackOrder = inheritClass(Scan, {
 		if self.data then
 			if Board then
 				if self.data.regenPsionId then
-					Board:RemovePawn(Board:GetPawn(self.data.regenPsionId))
+					local regenPsion = Board:GetPawn(self.data.regenPsionId)
+					if regenPsion then
+						regenPsion:Kill(true)
+					end
 				end
 				if self.data.simpleEnemyId then
-					Board:RemovePawn(Board:GetPawn(self.data.simpleEnemyId))
+					local simpleEnemy = Board:GetPawn(self.data.simpleEnemyId)
+					if simpleEnemy then
+						simpleEnemy:Kill(true)
+					end
 				end
 			end
 			self.data = nil
@@ -183,7 +189,7 @@ scans.attackOrder = inheritClass(Scan, {
 						and pawnId ~= self.data.regenPsionId
 						and pawnId ~= self.data.simpleEnemyId
 					then
-						Board:GetPawn(pawnId):Kill()
+						Board:GetPawn(pawnId):Kill(true)
 					end
 				end
 				if not self.data.regenPsion:IsFire() then
@@ -203,6 +209,7 @@ scans.attackOrder = inheritClass(Scan, {
 				elseif self.data.simpleEnemy:GetHealth() > self.data.simpleEnemyHealth then
 					self.data.simpleEnemyHealth = self.data.simpleEnemy:GetHealth()
 					self:searchBoard(ATTACK_ORDER_REGENERATION)
+					self:evaluateResults()
 				end
 			end
 		end,
