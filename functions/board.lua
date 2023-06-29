@@ -54,6 +54,24 @@ local function onBoardClassInitialized(BoardClass, board)
 		return mouseTile()
 	end
 
+	BoardClass.GetAttackOrder = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local result
+
+		try(function()
+			result = memedit:require().board.getAttackOrder()
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardClass.GetMaxHealth = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
