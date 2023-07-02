@@ -246,4 +246,20 @@ scans.spaceDamageObjSize = inheritClass(Scan, {
 	end
 })
 
+-- The Game object size is used as a limit
+-- when scanning for values in the Game object.
+-- It is not absolutely vital to have this be 100% accurate.
+-- If it is too low, we won't find addresses above this value.
+-- If it is too high, the game could crash while scanning.
+-- We will attempt to make a guess that includes our scan(s),
+-- while keeping it fairly low to avoid potential crashes.
+scans.gameObjSize = inheritClass(Scan, {
+	id = "size_game",
+	name = "Game Object Size",
+	action = function(self)
+		-- Take a wild guess.
+		self:succeed(0xFFFF)
+	end
+})
+
 return scans
