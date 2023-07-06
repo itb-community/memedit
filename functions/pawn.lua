@@ -1156,6 +1156,32 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end)
 	end
 
+	-- Board.SetSmoke has two parameter. Param #2 allows setting
+	-- smoke without an animation. Add this functionality to
+	-- Pawn.SetShield.
+	BoardPawn.SetShield = function(self, shield, skipAnimation)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("boolean", type(shield), "Argument #1")
+		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #2")
+
+		local memedit = memedit:get()
+		if memedit and skipAnimation then
+			try(function()
+				memedit.pawn.setShield(self, shield)
+			end)
+			:catch(function(err)
+				error(string.format(
+						"memedit.dll: %s",
+						tostring(err)
+				))
+			end)
+
+			return
+		end
+
+		self:SetShieldVanilla(shield)
+	end
+
 	BoardPawn.SetSpaceColor = function(self, spaceColor)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.Equals("boolean", type(spaceColor), "Argument #1")
@@ -1249,32 +1275,6 @@ function onPawnClassInitialized(BoardPawn, pawn)
 					tostring(err)
 			))
 		end)
-	end
-
-	-- Board.SetSmoke has two parameter. Param #2 allows setting
-	-- smoke without an animation. Add this functionality to
-	-- Pawn.SetShield.
-	BoardPawn.SetShield = function(self, shield, skipAnimation)
-		Assert.Equals("userdata", type(self), "Argument #0")
-		Assert.Equals("boolean", type(shield), "Argument #1")
-		Assert.Equals({"nil", "boolean"}, type(skipAnimation), "Argument #2")
-
-		local memedit = memedit:get()
-		if memedit and skipAnimation then
-			try(function()
-				memedit.pawn.setShield(self, shield)
-			end)
-			:catch(function(err)
-				error(string.format(
-						"memedit.dll: %s",
-						tostring(err)
-				))
-			end)
-
-			return
-		end
-
-		self:SetShieldVanilla(shield)
 	end
 
 
