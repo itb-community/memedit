@@ -316,4 +316,19 @@ function utils.cleanupScanMovePawn()
 	end
 end
 
+function utils.boardHasAbility(ability)
+	if false
+		or Board == nil
+		or Board:IsMissionBoard() == false
+	then return false end
+
+	for i = 0, 2 do
+		local pawn = Board:GetPawn(i)
+		if pawn and pawn:IsAbility(ability) then
+			return true
+		end
+	end
+	return false
+end
+
 return utils

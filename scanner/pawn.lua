@@ -13,6 +13,7 @@ local randomCleanPoint = utils.randomCleanPoint
 local requireScanMovePlayerPawn = utils.requireScanMovePlayerPawn
 local cleanupScanMovePawn = utils.cleanupScanMovePawn
 local getMech = utils.getMech
+local boardHasAbility = utils.boardHasAbility
 local scans = {}
 
 
@@ -71,6 +72,63 @@ scans.baseMaxHealth = inheritClass(Scan, {
 		self:searchPawn(pawn, hp)
 		self:evaluateResults()
 	end
+})
+
+scans.bonusMove = inheritClass(Scan, {
+    id = "BonusMove",
+    name = "Pawn Bonus Move",
+    prerequisiteScans = {"vital.size_pawn", "pawn.WeaponList"},
+    access = "RW",
+    dataType = "int",
+		--Could cleanup chen's move but I'm not sure how to do so cleanly and I don't think it's that important
+    condition = function(self)
+        if false
+          or Board == nil
+          or Board:IsMissionBoard() == false
+          or Board:IsBusy()
+        then
+          return false, "Enter a Mission with Chen as a Pilot"
+        elseif modApi.deployment:isDeploymentPhase() or Game:GetTeamTurn() == TEAM_ENEMY then
+          return false, "Deploy Mechs and Wait"
+				elseif not boardHasAbility("Shifty") then
+					return false, "Return to a Mission with Chen as a Pilot"
+        end
+        return true
+    end,
+    action = function(self)
+        if self.iteration == 1 then --Set up scan
+            local nonChen
+            local chen
+            for i = 0, 2 do
+                local pawn = Board:GetPawn(i)
+                if pawn:IsAbility("Shifty") then
+                    chen = pawn --find chen
+                else
+                    nonChen = pawn --find not chen
+                end
+            end
+
+            -- Remove all weapons from Chen
+            local weaponList = memedit.dll.pawn.getWeaponList(chen)
+            local weaponCount = weaponList:size() - 1
+            for weaponIndex = weaponCount, 1, -1 do
+                weaponList:erase(weaponIndex)
+            end
+
+            -- Add a simple weapon that can attack anywhere to Chen
+            chen:AddWeapon("memedit_weapon")
+            chen:FireWeapon(Point(0,0), 1)
+
+            self.data = {
+                chen = chen,
+                nonChen = nonChen,
+            }
+        else
+            self:searchPawn(self.data.chen, 1)
+            self:searchPawn(self.data.nonChen, 0)
+            self:evaluateResults()
+        end
+    end,
 })
 
 scans.boosted = inheritClass(Scan, {
