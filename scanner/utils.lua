@@ -19,7 +19,7 @@ end
 
 function utils.boardExists()
 	if Board == nil or GetCurrentMission() == nil then
-		return false, "Enter a Mission with Chen as a Pilot"
+		return false, "Enter a mission"
 	elseif Board:IsBusy() then
 		return false, "Wait..."
 	else
@@ -29,9 +29,9 @@ end
 
 function utils.missionBoardExists()
 	if Board == nil or GetCurrentMission() == nil then
-		return false, "Enter a Mission with Chen as a Pilot"
+		return false, "Enter a mission"
 	elseif Board:IsMissionBoard() == nil then
-		return false, "Enter a Real Mission with Chen as a Pilot"
+		return false, "Enter a real mission"
 	elseif Board:IsBusy() then
 		return false, "Wait..."
 	else
