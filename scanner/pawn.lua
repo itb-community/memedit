@@ -80,7 +80,10 @@ scans.bonusMove = inheritClass(Scan, {
 	prerequisiteScans = {"vital.size_pawn", "pawn.WeaponList"},
 	access = "RW",
 	dataType = "int",
-	--Could cleanup chen's move but I'm not sure how to do so cleanly and I don't think it's that important
+	--Could use a cleanup, but I'm not entirely sure how
+	--Essentially, Chen needs to get their action back because
+	--It was used up during the scan
+	--It doesn't seem to currently cause issues
 	condition = function(self)
 		if false
 			or Board == nil
