@@ -103,6 +103,24 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		return self:GetArmedWeaponVanilla()
 	end
 
+	BoardPawn.GetBonusMove = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local result
+
+		try(function()
+			result = memedit:require().pawn.getBonusMove(self)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardPawn.GetClass = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -236,7 +254,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 
 		return result
 	end
-	
+
 	BoardPawn.GetMaxBaseHealth = function(self)
 		Assert.Equals("userdata", type(self), "Argument #0")
 
@@ -829,6 +847,21 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end
 
 		self:SetAcidVanilla(acid)
+	end
+
+	BoardPawn.SetBonusMove = function(self, bonusMove)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.Equals("number", type(bonusMove), "Argument #1")
+
+		try(function()
+			memedit:require().pawn.setBonusMove(self, bonusMove)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
 	end
 
 	-- Use memEdit for SetBoosted prior to 1.2.88,
