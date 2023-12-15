@@ -185,7 +185,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 			try(function()
 				local weaponCount = self:GetWeaponCount()
 				for weaponIndex = 1, weaponCount do
-					result[i] = self:GetWeaponBaseType(weaponIndex)
+					result[weaponIndex] = self:GetWeaponBaseType(weaponIndex)
 				end
 			end)
 			:catch(function(err)
