@@ -118,6 +118,48 @@ function utils.cleanPoint(random)
 	return result
 end
 
+function utils.buildingPeople1Point(random)
+	LOG("Utils")
+	local result = Point(0,0)
+	local board = Board
+
+	LOG("rand")
+	if random then
+		board = randomize(extract_table(Board:GetTiles()))
+	end
+
+	LOG("p")
+	for _, p in ipairs(board) do
+		if Board:IsBuilding(p) then
+			LOG("p found")
+			LOG(p)
+			result = p
+			break
+		end
+	end
+
+	if result == nil then
+		LOG("Nil")
+		error("Unable to find an existing building")
+	end
+	
+	LOG("Result")
+	return result
+end
+
+-- "borrowed" from modapiext
+function utils.getCurrentRegion()
+	if RegionData and RegionData.iBattleRegion then
+		if RegionData.iBattleRegion == 20 then
+			return RegionData["final_region"]
+		else
+			return RegionData["region"..RegionData.iBattleRegion]
+		end
+	end
+
+	return nil
+end
+
 -- Finds a tile that if turned into a building,
 -- will not be a unique building; and also does
 -- not have a pawn occupying it.
@@ -239,6 +281,10 @@ end
 -- returned tile
 function utils.randomUniqueBuildingPoint()
 	return utils.uniqueBuildingPoint(true)
+end
+
+function utils.randomBuildingPeople1Point()
+	return utils.buildingPeople1Point(true)
 end
 
 -- Removes all units of a specified team.

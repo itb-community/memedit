@@ -118,6 +118,29 @@ local function onBoardClassInitialized(BoardClass, board)
 		return result
 	end
 
+	BoardClass.GetPeople1 = function(self, loc)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+
+		if not self:IsValid(loc) then
+			return 0
+		end
+
+		local result
+
+		try(function()
+			result = memedit:require().board.getBuildingPeople1(loc)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardClass.GetTerrainIcon = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
@@ -301,6 +324,26 @@ local function onBoardClassInitialized(BoardClass, board)
 
 		try(function()
 			memedit:require().board.setRubbleType(loc, rubbleType)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardClass.SetBuildingPeople1 = function(self, loc, people1)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(people1), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+
+		try(function()
+			memedit:require().board.setBuildingPeople1(loc, people1)
 		end)
 		:catch(function(err)
 			error(string.format(

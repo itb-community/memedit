@@ -10,6 +10,8 @@ local randomUniqueBuildingPoint = utils.randomUniqueBuildingPoint
 local randomNonUniqueBuildingPoint = utils.randomNonUniqueBuildingPoint
 local requireScanMovePlayerPawn = utils.requireScanMovePlayerPawn
 local cleanupScanMovePawn = utils.cleanupScanMovePawn
+local randomBuildingPeople1Point = utils.randomBuildingPeople1Point
+local getCurrentRegion = utils.getCurrentRegion
 local scans = {}
 
 
@@ -18,7 +20,6 @@ local tilePreRequisites = {
 	"vital.delta_rows",
 	"vital.step_rows"
 }
-
 
 scans.acid = inheritClass(Scan, {
 	id = "Acid",
@@ -308,6 +309,54 @@ scans.uniqueBuildingName = inheritClass(Scan, {
 			-- Board:SetTerrain(unique, TERRAIN_BUILDING)
 			self:searchTile(unique, "str_bar1")
 			-- self:searchTile(nonUnique, "")
+			self:evaluateResults()
+		end
+	},
+})
+
+scans.buildingPeople1 = inheritClass(Scan, {
+	id = "BuildingPeople1",
+	name = "Tile Building People1",
+	prerequisiteScans = tilePreRequisites,
+	access = "RW",
+	dataType = "int",
+	condition = function(self)
+		if Board == nil or GetCurrentMission() == nil then
+			return false, "Enter a mission"
+		elseif Board:IsBusy() then
+			return false, "Wait..."
+		elseif randomBuildingPeople1Point() == Point(0,0) then
+			return false, "Enter a new mission with natural buildings..."
+		else
+			return true
+		end
+	end,
+	actions = {
+		function(self)
+			LOG("Start  ")
+			local building = randomBuildingPeople1Point()
+			LOG("build  ")
+			local region = getCurrentRegion()
+			LOG("reg  ")
+			local region = getCurrentRegion().player
+			LOG("reg1  ")
+			local region = getCurrentRegion().player.map_data
+			LOG("reg2  ")
+			local map = getCurrentRegion().player.map_data.map
+			LOG("map  ")
+			local people1 = nil
+			for _, tile in ipairs(map) do
+				LOG(tile.loc)
+				if tile.loc == building then
+					people1 = tile.people1
+					LOG(people1)
+					break
+				end
+			end
+			LOG(people1)
+			if people1 then
+				self:searchTile(building, people1)
+			end
 			self:evaluateResults()
 		end
 	},
