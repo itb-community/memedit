@@ -313,6 +313,26 @@ local function onBoardClassInitialized(BoardClass, board)
 		end)
 	end
 
+	BoardClass.SetFireType = function(self, loc, fireType)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(fireType), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+
+		try(function()
+			memedit:require().board.setFireType(loc, fireType)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
 	BoardClass.SetRubbleType = function(self, loc, rubbleType)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")

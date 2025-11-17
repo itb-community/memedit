@@ -324,7 +324,7 @@ scans.people1 = inheritClass(Scan, {
 		local ret = boardExists()
 		if ret ~= true then
 			return ret
-		else if randomBuildingPeople1Point() == Point(0,0) then
+		elseif randomBuildingPeople1Point() == Point(0,0) then
 			return false, "Enter a mission with natural buildings"
 		end
 		return true
