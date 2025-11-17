@@ -129,7 +129,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		local result
 
 		try(function()
-			result = memedit:require().board.getBuildingPeople1(loc)
+			result = memedit:require().board.getPeople1(loc)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -333,7 +333,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		end)
 	end
 
-	BoardClass.SetBuildingPeople1 = function(self, loc, people1)
+	BoardClass.SetPeople1 = function(self, loc, people1)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 		Assert.Equals("number", type(people1), "Argument #2")
@@ -343,7 +343,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		end
 
 		try(function()
-			memedit:require().board.setBuildingPeople1(loc, people1)
+			memedit:require().board.setPeople1(loc, people1)
 		end)
 		:catch(function(err)
 			error(string.format(

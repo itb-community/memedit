@@ -119,31 +119,24 @@ function utils.cleanPoint(random)
 end
 
 function utils.buildingPeople1Point(random)
-	LOG("Utils")
 	local result = Point(0,0)
 	local board = Board
 
-	LOG("rand")
 	if random then
 		board = randomize(extract_table(Board:GetTiles()))
 	end
 
-	LOG("p")
 	for _, p in ipairs(board) do
 		if Board:IsBuilding(p) then
-			LOG("p found")
-			LOG(p)
 			result = p
 			break
 		end
 	end
 
 	if result == nil then
-		LOG("Nil")
 		error("Unable to find an existing building")
 	end
 	
-	LOG("Result")
 	return result
 end
 
