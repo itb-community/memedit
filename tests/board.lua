@@ -251,6 +251,42 @@ testsuite.test_SetShield = function()
 	return true
 end
 
+
+testsuite.test_People1 = function()
+	Tests.RequireBoard()
+	local building = Tests.GetUncleanedBuilding()
+	local nonBuilding = Tests.GetUncleanedNonBuilding()
+	local memedit = memedit:get()
+
+	if memedit then
+		local people1Building = Board:GetPeople1(building)
+		local people1NonBuilding = Board:GetPeople1(nonBuilding)
+
+		Assert.NotEquals(0, people1Building)
+		Assert.Equals(0, people1NonBuilding)
+		
+		-- This can techincally be set without a building or set to 0 with a building
+		-- This means when used to remove or add a building it should be called to
+		-- set to 0 or a valid value respectively
+		Board:SetPeople1(building, 0)
+		local people1Building0 = Board:GetPeople1(building)
+		Assert.Equals(0, people1Building0)
+		
+		Board:SetPeople1(nonBuilding, 42)
+		local people1NonBuilding42 = Board:GetPeople1(nonBuilding)
+		Assert.Equals(42, people1NonBuilding42)
+		
+		-- Clean up/reset the values to not interfer with any other tests
+		Board:SetPeople1(building, people1Building)
+		Board:SetPeople1(nonBuilding, 0)
+	else
+		Assert.ShouldError(Board.GetPeople1, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.SetPeople1, {Board, p}, "Function should fail without memedit")
+	end
+
+	return true
+end
+
 testsuite.test_UniqueBuilding = function()
 	Tests.RequireBoard()
 	local p = Tests.GetCleanTile()

@@ -52,6 +52,20 @@ testsuite.test_tile_health = function()
 	return true
 end
 
+testsuite.test_tile_people1 = function()
+	Tests.RequireBoard()
+	Tests.RequireMemedit()
+	local building = Tests.GetUncleanedBuilding()
+	local people1Building = memedit.dll.board.getPeople1(building)
+	Assert.NotEquals(0, people1Building)
+
+	local nonBuilding = Tests.GetUncleanedNonBuilding()
+	local people1NonBuilding = memedit.dll.board.getPeople1(nonBuilding)
+	Assert.Equals(0, people1NonBuilding)
+
+	return true
+end
+
 testsuite.test_tile_rubbleType = function()
 	Tests.RequireBoard()
 	Tests.RequireMemedit()
