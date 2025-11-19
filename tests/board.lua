@@ -24,10 +24,20 @@ testsuite.test_GetFireType = function()
 		Board:SetTerrain(p, TERRAIN_FOREST)
 		Board:SetFire(p, true)
 		local fireType_ForestFire = Board:GetFireType(p)
+		
+		Board:ClearSpace(p)
+		Board:SetFireType(p, FIRE_TYPE_NORMAL_FIRE)
+		local fireType_NormalFire_Set = Board:GetFireType(p)
+		
+		Board:ClearSpace(p)
+		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
+		local fireType_ForestFire_Set = Board:GetFireType(p)
 
 		Assert.Equals(FIRE_TYPE_NONE, fireType_None)
 		Assert.Equals(FIRE_TYPE_NORMAL_FIRE, fireType_NormalFire)
 		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire)
+		Assert.Equals(FIRE_TYPE_NORMAL_FIRE, fireType_NormalFire_Set)
+		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire_Set)
 
 		Board:ClearSpace(p)
 	else
