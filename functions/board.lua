@@ -118,11 +118,11 @@ local function onBoardClassInitialized(BoardClass, board)
 		return result
 	end
 
-	BoardClass.GetPeople1 = function(self, loc)
+	BoardClass.GetBuildingScore = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
-		if not self:IsValid(loc) then
+		if not self:IsValid(loc) or self:GetTerrain(loc) ~= TERRAIN_BUILDING then
 			return 0
 		end
 
@@ -321,6 +321,17 @@ local function onBoardClassInitialized(BoardClass, board)
 		if not self:IsValid(loc) then
 			return
 		end
+		
+		-- The game uses terrain_road for forest fires internally
+		-- If we leave it as forest, it will have a different image
+		-- and show the forest with flames under it
+		if fireType == FIRE_TYPE_FOREST_FIRE and Board:GetTerrain(loc) == TERRAIN_FOREST then
+			-- If we are igniting a forest, set type to road
+			Board:SetTerrain(loc, TERRAIN_ROAD)
+		else if fireType == FIRE_TYPE_NONE and Board:GetFireType(loc) == FIRE_TYPE_FOREST_FIRE then
+			-- If we are putting out a forest, set type back to forrest
+			Board:SetTerrain(loc, TERRAIN_FOREST)
+		end
 
 		try(function()
 			memedit:require().board.setFireType(loc, fireType)
@@ -353,17 +364,19 @@ local function onBoardClassInitialized(BoardClass, board)
 		end)
 	end
 
-	BoardClass.SetPeople1 = function(self, loc, people1)
+	BoardClass.SetScoredBuilding = function(self, loc, score)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
-		Assert.Equals("number", type(people1), "Argument #2")
+		Assert.Equals("number", type(score), "Argument #2")
 
 		if not self:IsValid(loc) then
 			return
 		end
+		
+		self:SetTerrain(loc, TERRAIN_BUILDING)
 
 		try(function()
-			memedit:require().board.setPeople1(loc, people1)
+			memedit:require().board.setPeople1(loc, score)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -547,6 +560,28 @@ local function onBoardClassInitialized(BoardClass, board)
 		end
 
 		self:SetFrozenVanilla(loc, frozen)
+	end
+	
+	BoardClass.UnsetScoredBuilding = function(self, loc, terrain)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(terrain), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+		
+		self:SetTerrain(loc, terrain)
+
+		try(function()
+			memedit:require().board.setPeople1(loc, people1)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
 	end
 end
 
