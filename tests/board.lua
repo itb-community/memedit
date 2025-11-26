@@ -27,7 +27,7 @@ testsuite.test_GetFireType = function()
 
 		Assert.Equals(FIRE_TYPE_NONE, fireType_None)
 		Assert.Equals(FIRE_TYPE_NORMAL_FIRE, fireType_NormalFire)
-		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire)		
+		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire)
 
 		Board:ClearSpace(p)
 	else

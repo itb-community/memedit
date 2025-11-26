@@ -118,7 +118,7 @@ function utils.cleanPoint(random)
 	return result
 end
 
-function utils.buildingPeople1Point(random)
+function utils.scoredBuildingPoint(random)
 	local result = Point(0,0)
 	local board = Board
 
@@ -276,8 +276,8 @@ function utils.randomUniqueBuildingPoint()
 	return utils.uniqueBuildingPoint(true)
 end
 
-function utils.randomBuildingPeople1Point()
-	return utils.buildingPeople1Point(true)
+function utils.randomScoredBuildingPoint()
+	return utils.scoredBuildingPoint(true)
 end
 
 -- Removes all units of a specified team.

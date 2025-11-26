@@ -10,7 +10,7 @@ local randomUniqueBuildingPoint = utils.randomUniqueBuildingPoint
 local randomNonUniqueBuildingPoint = utils.randomNonUniqueBuildingPoint
 local requireScanMovePlayerPawn = utils.requireScanMovePlayerPawn
 local cleanupScanMovePawn = utils.cleanupScanMovePawn
-local randomBuildingPeople1Point = utils.randomBuildingPeople1Point
+local randomScoredBuildingPoint = utils.randomScoredBuildingPoint
 local getCurrentRegion = utils.getCurrentRegion
 local scans = {}
 
@@ -20,6 +20,7 @@ local tilePreRequisites = {
 	"vital.delta_rows",
 	"vital.step_rows"
 }
+
 
 scans.acid = inheritClass(Scan, {
 	id = "Acid",
@@ -324,14 +325,17 @@ scans.people1 = inheritClass(Scan, {
 		local ret = boardExists()
 		if ret ~= true then
 			return ret
-		elseif randomBuildingPeople1Point() == Point(0,0) then
-			return false, "Enter a mission with natural buildings"
+		-- Wait for player turn to ensure the current region info is updated
+		elseif Game:GetTeamTurn() ~= TEAM_PLAYER then
+			return false, "Wait for player's turn..."
+		elseif randomScoredBuildingPoint() == Point(0,0) then
+			return false, "Enter a mission with natural buildings (press tab, type 'win', press enter, then tab to close)"
 		end
 		return true
 	end,
 	actions = {
 		function(self)
-			local building = randomBuildingPeople1Point()
+			local building = randomScoredBuildingPoint()
 			local map = getCurrentRegion().player.map_data.map
 			local people1 = nil
 			for _, tile in ipairs(map) do
@@ -340,6 +344,7 @@ scans.people1 = inheritClass(Scan, {
 					break
 				end
 			end
+			
 			if people1 then
 				self:searchTile(building, people1)
 			end
