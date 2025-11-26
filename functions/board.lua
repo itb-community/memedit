@@ -118,7 +118,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		return result
 	end
 
-	BoardClass.GetBuildingScore = function(self, loc)
+	BoardClass.GetScoredBuildingScore = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
@@ -328,8 +328,8 @@ local function onBoardClassInitialized(BoardClass, board)
 		if fireType == FIRE_TYPE_FOREST_FIRE and Board:GetTerrain(loc) == TERRAIN_FOREST then
 			-- If we are igniting a forest, set type to road
 			Board:SetTerrain(loc, TERRAIN_ROAD)
-		else if fireType == FIRE_TYPE_NONE and Board:GetFireType(loc) == FIRE_TYPE_FOREST_FIRE then
-			-- If we are putting out a forest, set type back to forrest
+		elseif fireType == FIRE_TYPE_NONE and Board:GetFireType(loc) == FIRE_TYPE_FOREST_FIRE then
+			-- If we are putting out a forest, set type back to forest
 			Board:SetTerrain(loc, TERRAIN_FOREST)
 		end
 
@@ -373,9 +373,12 @@ local function onBoardClassInitialized(BoardClass, board)
 			return
 		end
 		
+		local terrain = self:GetTerrain(loc)
+		local prevScore = 0
 		self:SetTerrain(loc, TERRAIN_BUILDING)
 
 		try(function()
+			prevScore = memedit:require().board.getPeople1(loc)
 			memedit:require().board.setPeople1(loc, score)
 		end)
 		:catch(function(err)
@@ -384,6 +387,8 @@ local function onBoardClassInitialized(BoardClass, board)
 					tostring(err)
 			))
 		end)
+		
+		return terrain, prevScore
 	end
 
 	-- SetSmoke has two parameter. Param #2 allows setting smoke
@@ -573,8 +578,10 @@ local function onBoardClassInitialized(BoardClass, board)
 		
 		self:SetTerrain(loc, terrain)
 
+		local score = 0
 		try(function()
-			memedit:require().board.setPeople1(loc, people1)
+			score = memedit:require().board.getPeople1(loc)
+			memedit:require().board.setPeople1(loc, 0)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -582,6 +589,7 @@ local function onBoardClassInitialized(BoardClass, board)
 					tostring(err)
 			))
 		end)
+		return score
 	end
 end
 

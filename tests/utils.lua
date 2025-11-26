@@ -7,7 +7,11 @@ function Tests.GetCleanTile()
 	local tiles = randomize(extract_table(Board:GetTiles()))
 
 	for i, p in ipairs(tiles) do
-		if not Board:IsPawnSpace(p) then
+		-- Building spaces have extra data that is not cleared. Namely
+		-- people1 and people2. This can cause issues with other scans
+		-- if we clear these as that data is not cleared and may cause
+		-- random failures if we happen to chose a partially cleared space
+		if not Board:IsPawnSpace(p) and not Board:IsBuilding(p) then
 			Board:ClearSpace(p)
 			return p
 		end

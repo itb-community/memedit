@@ -24,20 +24,10 @@ testsuite.test_GetFireType = function()
 		Board:SetTerrain(p, TERRAIN_FOREST)
 		Board:SetFire(p, true)
 		local fireType_ForestFire = Board:GetFireType(p)
-		
-		Board:ClearSpace(p)
-		Board:SetFireType(p, FIRE_TYPE_NORMAL_FIRE)
-		local fireType_NormalFire_Set = Board:GetFireType(p)
-		
-		Board:ClearSpace(p)
-		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
-		local fireType_ForestFire_Set = Board:GetFireType(p)
 
 		Assert.Equals(FIRE_TYPE_NONE, fireType_None)
 		Assert.Equals(FIRE_TYPE_NORMAL_FIRE, fireType_NormalFire)
-		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire)
-		Assert.Equals(FIRE_TYPE_NORMAL_FIRE, fireType_NormalFire_Set)
-		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire_Set)
+		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire)		
 
 		Board:ClearSpace(p)
 	else
@@ -173,6 +163,57 @@ testsuite.test_SetAcid = function()
 	return true
 end
 
+testsuite.test_SetFireType = function()
+	Tests.RequireBoard()
+	local p = Tests.GetCleanTile()
+	local memedit = memedit:get()
+
+	if memedit then		
+		Board:ClearSpace(p)
+		Board:SetFireType(p, FIRE_TYPE_NORMAL_FIRE)
+		local fireType_NormalFire_Set = Board:GetFireType(p)
+		
+		Board:ClearSpace(p)
+		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
+		local fireType_ForestFire_Set = Board:GetFireType(p)
+
+		Assert.Equals(FIRE_TYPE_NORMAL_FIRE, fireType_NormalFire_Set)
+		Assert.Equals(FIRE_TYPE_FOREST_FIRE, fireType_ForestFire_Set)
+		
+		-- Test some of the auto setting terrain
+		Board:ClearSpace(p)
+		Board:SetTerrain(p, TERRAIN_ROAD)
+		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
+		local forestFire_Road_Terrain = Board:GetTerrain(p)
+		
+		Board:SetFireType(p, FIRE_TYPE_NORMAL_FIRE)
+		local forestFire_Road_ToNormal_Terrain = Board:GetTerrain(p)
+		
+		Board:SetFireType(p, FIRE_TYPE_NONE)
+		local forestFire_Road_RemovedNormal_Terrain = Board:GetTerrain(p)
+		
+		Board:ClearSpace(p)
+		Board:SetTerrain(p, TERRAIN_FOREST)
+		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
+		local forestFire_Forest_Terrain = Board:GetTerrain(p)
+		
+		Board:SetFireType(p, FIRE_TYPE_NONE)
+		local forestFire_Removed_Terrain = Board:GetTerrain(p)
+		
+		Assert.Equals(TERRAIN_ROAD, forestFire_Road_Terrain)
+		Assert.Equals(TERRAIN_ROAD, forestFire_Road_ToNormal_Terrain)
+		Assert.Equals(TERRAIN_ROAD, forestFire_Road_RemovedNormal_Terrain)
+		Assert.Equals(TERRAIN_ROAD, forestFire_Forest_Terrain)
+		Assert.Equals(TERRAIN_FOREST, forestFire_Removed_Terrain)
+		
+		Board:ClearSpace(p)
+	else
+		Assert.ShouldError(Board.GetFireType, {Board, p}, "Function should fail without memedit")
+	end
+
+	return true
+end
+
 testsuite.test_SetFrozen = function()
 	Tests.RequireBoard()
 	local p = Tests.GetNonUniqueBuildingTile()
@@ -262,33 +303,45 @@ testsuite.test_SetShield = function()
 end
 
 
-testsuite.test_People1 = function()
+testsuite.test_ScoredBuilding = function()
 	Tests.RequireBoard()
 	local building = Tests.GetUncleanedBuilding()
 	local nonBuilding = Tests.GetUncleanedNonBuilding()
 	local memedit = memedit:get()
 
 	if memedit then
-		local people1Building = Board:GetPeople1(building)
-		local people1NonBuilding = Board:GetPeople1(nonBuilding)
+		local buildingScore = Board:GetScoredBuildingScore(building)
+		local nonBuildingScore = Board:GetScoredBuildingScore(nonBuilding)
+		local nonBuildingTerrain = Board:GetTerrain(nonBuilding)
 
-		Assert.NotEquals(0, people1Building)
-		Assert.Equals(0, people1NonBuilding)
+		-- Could be any value but should never be 0
+		Assert.NotEquals(0, buildingScore)
+		Assert.Equals(0, nonBuildingScore)
 		
-		-- This can techincally be set without a building or set to 0 with a building
-		-- This means when used to remove or add a building it should be called to
-		-- set to 0 or a valid value respectively
-		Board:SetPeople1(building, 0)
-		local people1Building0 = Board:GetPeople1(building)
-		Assert.Equals(0, people1Building0)
+		-- Ensure it returns the current score and sets the terrain as expected
+		local unsetScoreReturn = Board:UnsetScoredBuilding(building, TERRAIN_FOREST)
+		local buildingUnsetScore = Board:GetScoredBuildingScore(building)
+		local buildingUnsetTerrain = Board:GetTerrain(building)
+		Assert.Equals(buildingScore, unsetScoreReturn)
+		Assert.Equals(0, buildingUnsetScore)
+		Assert.Equals(TERRAIN_FOREST, buildingUnsetTerrain)
 		
-		Board:SetPeople1(nonBuilding, 42)
-		local people1NonBuilding42 = Board:GetPeople1(nonBuilding)
-		Assert.Equals(42, people1NonBuilding42)
+		-- Ensure it returns current terrain and sets the score and set terrain to building
+		local nonBuildingTerrainReturn, nonBuildingScore = Board:SetScoredBuilding(nonBuilding, 42)
+		local nonBuildingSetScore = Board:GetScoredBuildingScore(nonBuilding)
+		local nonBuildingSetTerrain = Board:GetTerrain(nonBuilding)
+		Assert.Equals(nonBuildingTerrain, nonBuildingTerrainReturn)
+		Assert.Equals(0, nonBuildingScore)
+		Assert.Equals(42, nonBuildingSetScore)
+		Assert.Equals(TERRAIN_BUILDING, nonBuildingSetTerrain)
+		
+		-- Ensure it returns the previous score if there is one
+		local _, prevScore = Board:SetScoredBuilding(nonBuilding, 84)
+		Assert.Equals(prevScore, nonBuildingSetScore)
 		
 		-- Clean up/reset the values to not interfer with any other tests
-		Board:SetPeople1(building, people1Building)
-		Board:SetPeople1(nonBuilding, 0)
+		Board:SetScoredBuilding(building, buildingScore)
+		Board:UnsetScoredBuilding(nonBuilding, nonBuildingTerrain)
 	else
 		Assert.ShouldError(Board.GetPeople1, {Board, p}, "Function should fail without memedit")
 		Assert.ShouldError(Board.SetPeople1, {Board, p}, "Function should fail without memedit")

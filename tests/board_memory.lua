@@ -160,6 +160,7 @@ testsuite.test_tile_uniqueBuildingName = function()
 	--
 	-- However, it is preferred to only read and not
 	-- write to memory when testing.
+	local origTerrain = Board:GetTerrain(p)
 	Board:SetTerrain(p, TERRAIN_BUILDING)
 	Board:AddUniqueBuilding("str_bar1")
 
@@ -171,6 +172,9 @@ testsuite.test_tile_uniqueBuildingName = function()
 			Assert.Equals("", uniqueBuildingName)
 		end
 	end
-
+	
+	-- Set the terrain back to make sure not to interfer
+	-- with the people1/scored building tests
+	Board:SetTerrain(p, origTerrain)
 	return true
 end
