@@ -118,28 +118,6 @@ function utils.cleanPoint(random)
 	return result
 end
 
-function utils.scoredBuildingPoint(random)
-	local result = Point(0,0)
-	local board = Board
-
-	if random then
-		board = randomize(extract_table(Board:GetTiles()))
-	end
-
-	for _, p in ipairs(board) do
-		if Board:IsBuilding(p) then
-			result = p
-			break
-		end
-	end
-
-	if result == nil then
-		error("Unable to find an existing building")
-	end
-	
-	return result
-end
-
 -- "borrowed" from modapiext
 function utils.getCurrentRegion()
 	if RegionData and RegionData.iBattleRegion then
@@ -148,6 +126,31 @@ function utils.getCurrentRegion()
 		else
 			return RegionData["region"..RegionData.iBattleRegion]
 		end
+	end
+
+	return nil
+end
+
+function utils.tileWithPeople1(random)
+	local region = utils.getCurrentRegion()
+	local tiles = {}
+	if region ~= nil then
+		local map = region.player.map_data.map
+		for _, tile in ipairs(map) do
+			if tile.people1 ~= nil and tile.people1 ~= 0 then
+				if random then
+					table.insert(tiles, tile)
+				else
+					return tile
+				end
+			end
+		end
+	end
+
+	-- if we get here then we want a random one
+	if #tiles > 0 then
+		local randomIndex = math.random(#tiles)
+		return tiles[randomIndex]
 	end
 
 	return nil
@@ -276,8 +279,8 @@ function utils.randomUniqueBuildingPoint()
 	return utils.uniqueBuildingPoint(true)
 end
 
-function utils.randomScoredBuildingPoint()
-	return utils.scoredBuildingPoint(true)
+function utils.randomTileWithPeople1()
+	return utils.tileWithPeople1(true)
 end
 
 -- Removes all units of a specified team.
