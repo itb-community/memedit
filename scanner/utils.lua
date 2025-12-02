@@ -131,7 +131,7 @@ function utils.getCurrentRegion()
 	return nil
 end
 
-function utils.tileWithPeople1(random)
+function utils.tileWithPeople(random)
 	local region = utils.getCurrentRegion()
 	local tiles = {}
 	if region ~= nil then
@@ -279,8 +279,8 @@ function utils.randomUniqueBuildingPoint()
 	return utils.uniqueBuildingPoint(true)
 end
 
-function utils.randomTileWithPeople1()
-	return utils.tileWithPeople1(true)
+function utils.randomTileWithPeople()
+	return utils.tileWithPeople(true)
 end
 
 -- Removes all units of a specified team.

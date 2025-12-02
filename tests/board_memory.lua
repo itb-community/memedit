@@ -52,15 +52,15 @@ testsuite.test_tile_health = function()
 	return true
 end
 
-testsuite.test_tile_people1 = function()
+testsuite.test_tile_people = function()
 	Tests.RequireBoard()
 	Tests.RequireMemedit()
 	local building = Tests.GetUncleanedBuilding()
-	local people1Building = memedit.dll.board.getPeople1(building)
+	local people1Building = memedit.dll.board.getPeople(building)
 	Assert.NotEquals(0, people1Building)
 
 	local nonBuilding = Tests.GetUncleanedNonBuilding()
-	local people1NonBuilding = memedit.dll.board.getPeople1(nonBuilding)
+	local people1NonBuilding = memedit.dll.board.getPeople(nonBuilding)
 	Assert.Equals(0, people1NonBuilding)
 
 	return true
