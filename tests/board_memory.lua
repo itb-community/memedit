@@ -52,20 +52,6 @@ testsuite.test_tile_health = function()
 	return true
 end
 
-testsuite.test_tile_people = function()
-	Tests.RequireBoard()
-	Tests.RequireMemedit()
-	local building = Tests.GetUncleanedBuilding()
-	local people1Building = memedit.dll.board.getPeople(building)
-	Assert.NotEquals(0, people1Building)
-
-	local nonBuilding = Tests.GetUncleanedNonBuilding()
-	local people1NonBuilding = memedit.dll.board.getPeople(nonBuilding)
-	Assert.Equals(0, people1NonBuilding)
-
-	return true
-end
-
 testsuite.test_tile_rubbleType = function()
 	Tests.RequireBoard()
 	Tests.RequireMemedit()
@@ -160,7 +146,6 @@ testsuite.test_tile_uniqueBuildingName = function()
 	--
 	-- However, it is preferred to only read and not
 	-- write to memory when testing.
-	local origTerrain = Board:GetTerrain(p)
 	Board:SetTerrain(p, TERRAIN_BUILDING)
 	Board:AddUniqueBuilding("str_bar1")
 
@@ -172,9 +157,6 @@ testsuite.test_tile_uniqueBuildingName = function()
 			Assert.Equals("", uniqueBuildingName)
 		end
 	end
-	
-	-- Set the terrain back to make sure not to interfer
-	-- with the people1/scored building tests
-	Board:SetTerrain(p, origTerrain)
+
 	return true
 end

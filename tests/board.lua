@@ -168,26 +168,25 @@ testsuite.test_SetFireType = function()
 	local p = Tests.GetCleanTile()
 	local memedit = memedit:get()
 
-	if memedit then		
+	if memedit then
 		Board:ClearSpace(p)
 		Board:SetFireType(p, FIRE_TYPE_NORMAL_FIRE)
 		Assert.Equals(true, Board:IsFire(p))
 		Assert.Equals(false, Board:IsForestFire(p))
-		
+
 		Board:SetFireType(p, FIRE_TYPE_NONE)
 		Assert.Equals(false, Board:IsFire(p))
-		
+
 		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
 		Assert.Equals(true, Board:IsFire(p))
 		Assert.Equals(true, Board:IsForestFire(p))
-		
+
 		Board:SetFireType(p, FIRE_TYPE_NONE)
 		Assert.Equals(false, Board:IsFire(p))
-		
+
 		Board:ClearSpace(p)
 	else
-		Assert.ShouldError(Board.IsForestFire, {Board, p}, "Function should fail without memedit")
-		Assert.ShouldError(Board.SetFireType, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.SetFireType, {Board, p, FIRE_TYPE_NORMAL_FIRE}, "Function should fail without memedit")
 	end
 
 	return true
@@ -281,39 +280,39 @@ testsuite.test_SetShield = function()
 	return true
 end
 
-
 testsuite.test_People = function()
 	Tests.RequireBoard()
-	local building = Tests.GetUncleanedBuilding()
-	local nonBuilding = Tests.GetUncleanedNonBuilding()
+	local p = Tests.GetCleanTile()
 	local memedit = memedit:get()
 
 	if memedit then
-		local buildingScore = Board:GetPeople(building)
-		local nonBuildingScore = Board:GetPeople(nonBuilding)
+		-- Set up our tile as a building
+		local people = 1
+		Board:SetTerrain(p, TERRAIN_BUILDING)
+		Board:SetPopulated(true, p)
+		Board:SetPeoplePopulated(p, people)
+		Board:SetPeopleEvacuated(p, 0)
 
-		-- Could be any value but should never be 0
-		Assert.NotEquals(0, buildingScore)
-		Assert.Equals(0, nonBuildingScore)
-		
-		-- Test changing the value for a building
-		Board:SetPeople(building, 0)
-		Assert.Equals(0, Board:GetPeople(building))
-		Board:SetPeople(building, 1)
-		Assert.Equals(1, Board:GetPeople(building))
-		-- Set it back to the original state
-		Board:SetPeople(building, buildingScore)
-		
-		-- Test for a non building. This is allowed but doesn't do
-		-- anything
-		Board:SetPeople(nonBuilding, 42)
-		Assert.Equals(42, Board:GetPeople(nonBuilding))
-		Board:SetPeople(nonBuilding, nonBuildingScore)
-		Assert.Equals(0, Board:GetPeople(nonBuilding))
-		-- Already back to original state
+		-- Now when we evac, if we have the right values, we will
+		-- see it switch from populated to evacuated.
+		Board:SetPopulated(false, p)
+		Assert.Equals(0, Board:GetPeoplePopulated(p))
+		Assert.Equals(people, Board:GetPeopleEvacuated(p))
+
+		-- And repopulating should revers it
+		Board:SetPopulated(true, p)
+		Assert.Equals(people, Board:GetPeoplePopulated(p))
+		Assert.Equals(0, Board:GetPeopleEvacuated(p))
+
+		-- Clear the tile
+		Board:ClearSpace(p)
+		-- People is not cleared by this fn so manually do it
+		Board:SetPeoplePopulated(p, 0)
 	else
-		Assert.ShouldError(Board.GetPeople, {Board, p}, "Function should fail without memedit")
-		Assert.ShouldError(Board.SetPeople, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.GetPeopleEvacuated, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.GetPeoplePopulated, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.SetPeoplePopulated, {Board, p, 42}, "Function should fail without memedit")
+		Assert.ShouldError(Board.SetPeopleEvacuated, {Board, p, 42}, "Function should fail without memedit")
 	end
 
 	return true

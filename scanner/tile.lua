@@ -315,9 +315,46 @@ scans.uniqueBuildingName = inheritClass(Scan, {
 	},
 })
 
-scans.people = inheritClass(Scan, {
-	id = "People",
-	name = "Tile People (for buildings)",
+scans.peopleEvacuated = inheritClass(Scan, {
+	id = "PeopleEvacuated",
+	name = "Tile population evacuated value (people2 for buildings)",
+	prerequisiteScans = tilePreRequisites,
+	access = "RW",
+	dataType = "int",
+	condition = function(self)
+		local ret = boardExists()
+		if ret ~= true then
+			return ret
+		-- Wait for player turn to ensure the current region info is updated
+		elseif Game:GetTeamTurn() ~= TEAM_PLAYER then
+			return false, "Wait for player's turn..."
+		elseif not randomTileWithPeople() then
+			return false, "Enter new mission (press tab, type 'win', press enter, then tab to close)"
+		end
+		return true
+	end,
+	actions = {
+		function(self)
+			local tile = randomTileWithPeople()
+			if tile then
+				local people = tile.people1
+				self:searchTile(tile.loc, 0)
+				-- Evacuating moves value from people1 to people2 and sets people1 to 0
+				Board:SetPopulated(false, tile.loc)
+				-- people2 should now hold the people value
+				self:searchTile(tile.loc, people)
+
+				-- Reset the state
+				Board:SetPopulated(true, tile.loc)
+			end
+			self:evaluateResults()
+		end
+	},
+})
+
+scans.peoplePopulated = inheritClass(Scan, {
+	id = "PeoplePopulated",
+	name = "Tile population value (people1 for buildings)",
 	prerequisiteScans = tilePreRequisites,
 	access = "RW",
 	dataType = "int",
@@ -338,6 +375,12 @@ scans.people = inheritClass(Scan, {
 			local tile = randomTileWithPeople()
 			if tile then
 				self:searchTile(tile.loc, tile.people1)
+				-- Evacuating moves value from people1 to people2 and sets people1 to 0
+				Board:SetPopulated(false, tile.loc)
+				self:searchTile(tile.loc, 0)
+
+				-- Reset the state
+				Board:SetPopulated(true, tile.loc)
 			end
 			self:evaluateResults()
 		end

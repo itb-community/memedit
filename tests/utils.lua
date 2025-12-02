@@ -7,11 +7,7 @@ function Tests.GetCleanTile()
 	local tiles = randomize(extract_table(Board:GetTiles()))
 
 	for i, p in ipairs(tiles) do
-		-- Building spaces have extra data that is not cleared. Namely
-		-- people1 and people2. This can cause issues with other scans
-		-- if we clear these as that data is not cleared and may cause
-		-- random failures if we happen to chose a partially cleared space
-		if not Board:IsPawnSpace(p) and not Board:IsBuilding(p) then
+		if not Board:IsPawnSpace(p) then
 			Board:ClearSpace(p)
 			return p
 		end
@@ -33,28 +29,4 @@ function Tests.GetNonUniqueBuildingTile()
 	end
 
 	error("Error: no non-pawn, non-unique-building tile available")
-end
-
-function Tests.GetUncleanedBuilding()
-	local tiles = randomize(extract_table(Board:GetTiles()))
-
-	for i, p in ipairs(tiles) do
-		if Board:IsBuilding(p) then
-			return p
-		end
-	end
-
-	error("Error: no building tile available")
-end
-
-function Tests.GetUncleanedNonBuilding()
-	local tiles = randomize(extract_table(Board:GetTiles()))
-
-	for i, p in ipairs(tiles) do
-		if not Board:IsBuilding(p) then
-			return p
-		end
-	end
-
-	error("Error: no non-building tile available")
 end

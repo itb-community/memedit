@@ -118,14 +118,33 @@ local function onBoardClassInitialized(BoardClass, board)
 		return result
 	end
 
-	BoardClass.GetPeople = function(self, loc)
+	BoardClass.GetPeopleEvacuated = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 
 		local result
 
 		try(function()
-			result = memedit:require().board.getPeople(loc)
+			result = memedit:require().board.getPeopleEvacuated(loc)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardClass.GetPeoplePopulated = function(self, loc)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().board.getPeoplePopulated(loc)
 		end)
 		:catch(function(err)
 			error(string.format(
@@ -317,7 +336,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		if not self:IsValid(loc) then
 			return
 		end
-		
+
 		try(function()
 			memedit:require().board.setFireType(loc, fireType)
 		end)
@@ -349,7 +368,7 @@ local function onBoardClassInitialized(BoardClass, board)
 		end)
 	end
 
-	BoardClass.SetPeople = function(self, loc, score)
+	BoardClass.SetPeopleEvacuated = function(self, loc, score)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
 		Assert.Equals("number", type(score), "Argument #2")
@@ -359,7 +378,27 @@ local function onBoardClassInitialized(BoardClass, board)
 		end
 
 		try(function()
-			memedit:require().board.setPeople(loc, score)
+			memedit:require().board.setPeopleEvacuated(loc, score)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardClass.SetPeoplePopulated = function(self, loc, score)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(score), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+
+		try(function()
+			memedit:require().board.setPeoplePopulated(loc, score)
 		end)
 		:catch(function(err)
 			error(string.format(
