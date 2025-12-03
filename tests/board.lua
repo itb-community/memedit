@@ -299,15 +299,14 @@ testsuite.test_People = function()
 		Assert.Equals(0, Board:GetPeoplePopulated(p))
 		Assert.Equals(people, Board:GetPeopleEvacuated(p))
 
-		-- And repopulating should revers it
-		Board:SetPopulated(true, p)
-		Assert.Equals(people, Board:GetPeoplePopulated(p))
-		Assert.Equals(0, Board:GetPeopleEvacuated(p))
+		-- And Repopulating does NOT switch the poeple value back but just
+		-- sets the populated flag to true so we don't call that. 
 
 		-- Clear the tile
 		Board:ClearSpace(p)
 		-- People is not cleared by this fn so manually do it
 		Board:SetPeoplePopulated(p, 0)
+		Board:SetPeopleEvacuated(p, 0)
 	else
 		Assert.ShouldError(Board.GetPeopleEvacuated, {Board, p}, "Function should fail without memedit")
 		Assert.ShouldError(Board.GetPeoplePopulated, {Board, p}, "Function should fail without memedit")
