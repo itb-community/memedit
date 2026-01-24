@@ -118,6 +118,44 @@ local function onBoardClassInitialized(BoardClass, board)
 		return result
 	end
 
+	BoardClass.GetPeopleEvacuated = function(self, loc)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().board.getPeopleEvacuated(loc)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardClass.GetPeoplePopulated = function(self, loc)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+
+		local result
+
+		try(function()
+			result = memedit:require().board.getPeoplePopulated(loc)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
 	BoardClass.GetTerrainIcon = function(self, loc)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
@@ -290,6 +328,26 @@ local function onBoardClassInitialized(BoardClass, board)
 		end)
 	end
 
+	BoardClass.SetFireType = function(self, loc, fireType)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(fireType), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+
+		try(function()
+			memedit:require().board.setFireType(loc, fireType)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
 	BoardClass.SetRubbleType = function(self, loc, rubbleType)
 		Assert.Equals("userdata", type(self), "Argument #0")
 		Assert.TypePoint(loc, "Argument #1")
@@ -301,6 +359,46 @@ local function onBoardClassInitialized(BoardClass, board)
 
 		try(function()
 			memedit:require().board.setRubbleType(loc, rubbleType)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardClass.SetPeopleEvacuated = function(self, loc, score)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(score), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+
+		try(function()
+			memedit:require().board.setPeopleEvacuated(loc, score)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardClass.SetPeoplePopulated = function(self, loc, score)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+		Assert.Equals("number", type(score), "Argument #2")
+
+		if not self:IsValid(loc) then
+			return
+		end
+
+		try(function()
+			memedit:require().board.setPeoplePopulated(loc, score)
 		end)
 		:catch(function(err)
 			error(string.format(

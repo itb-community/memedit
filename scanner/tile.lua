@@ -10,6 +10,8 @@ local randomUniqueBuildingPoint = utils.randomUniqueBuildingPoint
 local randomNonUniqueBuildingPoint = utils.randomNonUniqueBuildingPoint
 local requireScanMovePlayerPawn = utils.requireScanMovePlayerPawn
 local cleanupScanMovePawn = utils.cleanupScanMovePawn
+local randomTileWithPeople = utils.randomTileWithPeople
+local getCurrentRegion = utils.getCurrentRegion
 local scans = {}
 
 
@@ -309,6 +311,89 @@ scans.uniqueBuildingName = inheritClass(Scan, {
 			self:searchTile(unique, "str_bar1")
 			-- self:searchTile(nonUnique, "")
 			self:evaluateResults()
+		end
+	},
+})
+
+scans.peopleEvacuated = inheritClass(Scan, {
+	id = "PeopleEvacuated",
+	name = "Tile population evacuated value (people2 for buildings)",
+	prerequisiteScans = tilePreRequisites,
+	access = "RW",
+	dataType = "int",
+	instruction = "Enter new mission (press tab, type 'win', press enter, then tab to close)",
+	condition = function(self)
+		local ret = boardExists()
+		if ret ~= true then
+			return ret
+		-- Wait for player turn to ensure the current region info is updated
+		elseif Game:GetTeamTurn() ~= TEAM_PLAYER then
+			return false, "Wait for player's turn..."
+		end
+		return true
+	end,
+	actions = {
+		function(self)
+			local tile = randomTileWithPeople()
+			if tile then
+				-- The tile must be a building for set populated to work
+				Board:SetTerrain(tile.loc, TERRAIN_BUILDING)
+				-- We can't fully undo after setting populated to false so we need to make
+				-- sure we have a fresh tile
+				if Board:IsPowered(tile.loc) then
+					local people = tile.people1
+					
+					self:searchTile(tile.loc, 0)
+					
+					-- Evacuating moves value from people1 to people2 and sets people1 to 0
+					Board:SetPopulated(false, tile.loc)
+					-- people2 should now hold the people value
+					self:searchTile(tile.loc, people)
+					
+					self:evaluateResults()
+				end
+			end
+		end
+	},
+})
+
+scans.peoplePopulated = inheritClass(Scan, {
+	id = "PeoplePopulated",
+	name = "Tile population value (people1 for buildings)",
+	prerequisiteScans = tilePreRequisites,
+	access = "RW",
+	dataType = "int",
+	instruction = "Enter new mission (press tab, type 'win', press enter, then tab to close)",
+	condition = function(self)
+		local ret = boardExists()
+		if ret ~= true then
+			return ret
+		-- Wait for player turn to ensure the current region info is updated
+		elseif Game:GetTeamTurn() ~= TEAM_PLAYER then
+			return false, "Wait for player's turn..."
+		end
+		return true
+	end,
+	actions = {
+		function(self)
+			local tile = randomTileWithPeople()
+			if tile then
+				-- The tile must be a building for set populated to work
+				Board:SetTerrain(tile.loc, TERRAIN_BUILDING)
+				-- We can't fully undo after setting populated to false so we need to make
+				-- sure we have a fresh tile
+				if Board:IsPowered(tile.loc) then
+					self:searchTile(tile.loc, tile.people1)
+
+					-- Evacuating moves value from people1 to people2 and sets people1 to 0
+					-- The tile must be a building for set populated to work
+					Board:SetTerrain(tile.loc, TERRAIN_BUILDING)
+					Board:SetPopulated(false, tile.loc)
+					self:searchTile(tile.loc, 0)
+					
+					self:evaluateResults()
+				end
+			end
 		end
 	},
 })

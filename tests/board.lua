@@ -163,6 +163,35 @@ testsuite.test_SetAcid = function()
 	return true
 end
 
+testsuite.test_SetFireType = function()
+	Tests.RequireBoard()
+	local p = Tests.GetCleanTile()
+	local memedit = memedit:get()
+
+	if memedit then
+		Board:ClearSpace(p)
+		Board:SetFireType(p, FIRE_TYPE_NORMAL_FIRE)
+		Assert.Equals(true, Board:IsFire(p))
+		Assert.Equals(false, Board:IsForestFire(p))
+
+		Board:SetFireType(p, FIRE_TYPE_NONE)
+		Assert.Equals(false, Board:IsFire(p))
+
+		Board:SetFireType(p, FIRE_TYPE_FOREST_FIRE)
+		Assert.Equals(true, Board:IsFire(p))
+		Assert.Equals(true, Board:IsForestFire(p))
+
+		Board:SetFireType(p, FIRE_TYPE_NONE)
+		Assert.Equals(false, Board:IsFire(p))
+
+		Board:ClearSpace(p)
+	else
+		Assert.ShouldError(Board.SetFireType, {Board, p, FIRE_TYPE_NORMAL_FIRE}, "Function should fail without memedit")
+	end
+
+	return true
+end
+
 testsuite.test_SetFrozen = function()
 	Tests.RequireBoard()
 	local p = Tests.GetNonUniqueBuildingTile()
@@ -247,6 +276,43 @@ testsuite.test_SetShield = function()
 	Assert.Equals(maxHealth - 1, damagedPawnHp)
 
 	Board:ClearSpace(p)
+
+	return true
+end
+
+testsuite.test_People = function()
+	Tests.RequireBoard()
+	local p = Tests.GetCleanTile()
+	local memedit = memedit:get()
+
+	if memedit then
+		-- Set up our tile as a building
+		local people = 1
+		Board:SetTerrain(p, TERRAIN_BUILDING)
+		Board:SetPopulated(true, p)
+		Board:SetPeoplePopulated(p, people)
+		Board:SetPeopleEvacuated(p, 0)
+
+		-- Now when we evac, if we have the right values, we will
+		-- see it switch from populated to evacuated.
+		Board:SetPopulated(false, p)
+		Assert.Equals(0, Board:GetPeoplePopulated(p))
+		Assert.Equals(people, Board:GetPeopleEvacuated(p))
+
+		-- And Repopulating does NOT switch the poeple value back but just
+		-- sets the populated flag to true so we don't call that. 
+
+		-- Clear the tile
+		Board:ClearSpace(p)
+		-- People is not cleared by this fn so manually do it
+		Board:SetPeoplePopulated(p, 0)
+		Board:SetPeopleEvacuated(p, 0)
+	else
+		Assert.ShouldError(Board.GetPeopleEvacuated, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.GetPeoplePopulated, {Board, p}, "Function should fail without memedit")
+		Assert.ShouldError(Board.SetPeoplePopulated, {Board, p, 42}, "Function should fail without memedit")
+		Assert.ShouldError(Board.SetPeopleEvacuated, {Board, p, 42}, "Function should fail without memedit")
+	end
 
 	return true
 end
