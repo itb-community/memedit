@@ -14,11 +14,12 @@ end
 
 function onPawnClassInitialized(BoardPawn, pawn)
 
-	-- Reference to overridden vanilla functions
+	-- Reference to overridden vanilla/modloader functions
 	BoardPawn.AddWeaponVanilla = pawn.AddWeapon
 	BoardPawn.GetArmedWeaponVanilla = BoardPawn.GetArmedWeapon
 	BoardPawn.GetEquippedWeaponsVanilla = BoardPawn.GetEquippedWeapons
 	BoardPawn.GetPoweredWeaponsVanilla = BoardPawn.GetPoweredWeapons
+	BoardPawn.GetQueuedVanilla = pawn.GetQueued
 	BoardPawn.IsJumperVanilla = pawn.IsJumper
 	BoardPawn.IsTeleporterVanilla = pawn.IsTeleporter
 	BoardPawn.IsWeaponEquippedVanilla = BoardPawn.IsWeaponEquipped
@@ -27,7 +28,7 @@ function onPawnClassInitialized(BoardPawn, pawn)
 	BoardPawn.SetFrozenVanilla = pawn.SetFrozen
 	BoardPawn.SetMechVanilla = pawn.SetMech
 	BoardPawn.SetShieldVanilla = pawn.SetShield
-
+	
 
 	-- With the addition of BoardPawn.IsNeutral,
 	-- mod loader's BoardPawn.SetNeutral is no longer needed.
@@ -359,6 +360,25 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		end
 
 		return self:GetPoweredWeaponsVanilla()
+	end
+	
+	BoardPawn.GetQueued = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local memedit = memedit:get()
+		if memedit then
+			local target = self:GetQueuedTarget()
+			if target and Board:IsValid(target) then
+				return {
+					piOrigin = self:GetSpace(),
+					piTarget = target,
+					piQueuedShot = target,
+					iQueuedSkill = self:GetSelectedWeapon(),
+				}
+			end
+			return nil
+		end
+		self:GetQueuedVanilla()
 	end
 
 	BoardPawn.GetQueuedTarget = function(self)
