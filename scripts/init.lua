@@ -2,8 +2,8 @@
 local extension = {
 	id = "memedit",
 	name = "memedit",
-	version = "1.2.1",
-	modApiVersion = "2.9.5",
+	version = "1.2.2",
+	modApiVersion = "2.9.6",
 	gameVersion = "1.2.93",
 	icon = "img/icon.png",
 	isExtension = true,
