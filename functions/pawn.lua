@@ -368,9 +368,10 @@ function onPawnClassInitialized(BoardPawn, pawn)
 		local memedit = memedit:get()
 		if memedit then
 			local target = self:GetQueuedTarget()
+			local origin = self:GetQueuedOrigin()
 			if target and Board:IsValid(target) then
 				return {
-					piOrigin = self:GetSpace(),
+					piOrigin = origin,
 					piTarget = target,
 					piQueuedShot = target,
 					iQueuedSkill = self:GetSelectedWeapon(),
@@ -391,6 +392,28 @@ function onPawnClassInitialized(BoardPawn, pawn)
 			result = Point(
 				memedit.pawn.getQueuedTargetX(self),
 				memedit.pawn.getQueuedTargetY(self)
+			)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+
+		return result
+	end
+
+	BoardPawn.GetQueuedOrigin = function(self)
+		Assert.Equals("userdata", type(self), "Argument #0")
+
+		local result
+
+		try(function()
+			local memedit = memedit:require()
+			result = Point(
+				memedit.pawn.getQueuedOriginX(self),
+				memedit.pawn.getQueuedOriginY(self)
 			)
 		end)
 		:catch(function(err)
@@ -1200,6 +1223,23 @@ function onPawnClassInitialized(BoardPawn, pawn)
 			local memedit = memedit:require()
 			memedit.pawn.setQueuedTargetX(self, loc.x)
 			memedit.pawn.setQueuedTargetY(self, loc.y)
+		end)
+		:catch(function(err)
+			error(string.format(
+					"memedit.dll: %s",
+					tostring(err)
+			))
+		end)
+	end
+
+	BoardPawn.SetQueuedOrigin = function(self, loc)
+		Assert.Equals("userdata", type(self), "Argument #0")
+		Assert.TypePoint(loc, "Argument #1")
+
+		try(function()
+			local memedit = memedit:require()
+			memedit.pawn.setQueuedOriginX(self, loc.x)
+			memedit.pawn.setQueuedOriginY(self, loc.y)
 		end)
 		:catch(function(err)
 			error(string.format(

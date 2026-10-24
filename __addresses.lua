@@ -2182,6 +2182,16 @@ local obj1 = {
 				[2] = 2;
 				[3] = 3;
 			};
+			["QueuedOriginX"] = {
+				[1] = 24;
+				[2] = 2;
+				[3] = 0;
+			};
+			["QueuedOriginY"] = {
+				[1] = 28;
+				[2] = 2;
+				[3] = 0;
+			};
 			["QueuedTargetX"] = {
 				[1] = 32;
 				[2] = 2;
@@ -2383,10 +2393,10 @@ local obj1 = {
 			["delta_weapons"] = 4;
 			["size_board"] = 29976;
 			["size_game"] = 65535;
-			["size_pawn"] = 5128;
-			["size_space_damage"] = 328;
+			["size_pawn"] = 5120;
+			["size_space_damage"] = 320;
 			["size_tile"] = 11196;
-			["size_weapon"] = 584;
+			["size_weapon"] = 1728;
 			["step_rows"] = 12;
 		};
 		["weapon"] = {
