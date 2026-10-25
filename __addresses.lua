@@ -2393,10 +2393,10 @@ local obj1 = {
 			["delta_weapons"] = 4;
 			["size_board"] = 29976;
 			["size_game"] = 65535;
-			["size_pawn"] = 5120;
-			["size_space_damage"] = 320;
+			["size_pawn"] = 5128;
+			["size_space_damage"] = 328;
 			["size_tile"] = 11196;
-			["size_weapon"] = 1728;
+			["size_weapon"] = 584;
 			["step_rows"] = 12;
 		};
 		["weapon"] = {
