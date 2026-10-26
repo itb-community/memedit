@@ -735,6 +735,62 @@ scans.queuedTargetY = inheritClass(Scan, {
 	end
 })
 
+scans.queuedOriginX = inheritClass(Scan, {
+	id = "QueuedOriginX",
+	name = "Pawn Queued Origin X",
+	prerequisiteScans = {
+		"vital.size_pawn",
+		"vital.delta_weapons"
+	},
+	access = "RW",
+	dataType = "int",
+	expectedResults = 3,
+	expectedResultIndex = 1,
+	condition = boardExists,
+	action = function(self)
+		local p1 = randomCleanPoint()
+		local p2 = randomCleanPoint()
+
+		prepareScanPawn{ SkillList = {"memedit_weaponQueued"} }
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
+
+		Board:AddPawn(pawn, p1)
+		pawn:FireWeapon(p2, 1)
+
+		self:searchPawn(pawn, p1.x)
+		self:evaluateResults()
+		Board:ClearSpace(p1)
+	end
+})
+
+scans.queuedOriginY = inheritClass(Scan, {
+	id = "QueuedOriginY",
+	name = "Pawn Queued Origin Y",
+	prerequisiteScans = {
+		"vital.size_pawn",
+		"vital.delta_weapons"
+	},
+	access = "RW",
+	dataType = "int",
+	expectedResults = 3,
+	expectedResultIndex = 1,
+	condition = boardExists,
+	action = function(self)
+		local p1 = randomCleanPoint()
+		local p2 = randomCleanPoint()
+
+		prepareScanPawn{ SkillList = {"memedit_weaponQueued"} }
+		local pawn = PAWN_FACTORY:CreatePawn("memedit_scanPawn")
+
+		Board:AddPawn(pawn, p1)
+		pawn:FireWeapon(p2, 1)
+
+		self:searchPawn(pawn, p1.y)
+		self:evaluateResults()
+		Board:ClearSpace(p1)
+	end
+})
+
 scans.shield = inheritClass(Scan, {
 	id = "Shield",
 	name = "Pawn Shield",
